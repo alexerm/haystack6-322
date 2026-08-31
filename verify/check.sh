@@ -51,5 +51,16 @@ else
   echo "  FAIL FACTS.md is missing"; fail=1
 fi
 
+# Every FACTS.md row must be a well-formed 3-column table row. A stray `|`
+# inside a claim silently truncates it, which is how fact 81 lost its tail.
+if [ -f FACTS.md ]; then
+  malformed=$(grep -E '^\| [0-9]+ \|' FACTS.md | awk '{
+    line=$0; gsub(/\\\|/,"",line); n=gsub(/\|/,"",line); if (n!=4) c++
+  } END { print c+0 }')
+  rowcount=$(grep -cE '^\| [0-9]+ \|' FACTS.md)
+  if [ "$malformed" -ne 0 ]; then echo "  FAIL $malformed malformed rows in FACTS.md"; fail=1
+  else echo "  ok   all $rowcount FACTS.md rows well-formed"; fi
+fi
+
 if [ "$fail" = 0 ]; then echo "all 6 routes reproduce their measured score"; else echo "CHECK FAILED"; fi
 exit "$fail"
