@@ -1,0 +1,18 @@
+This licence covers data/, routes/, and the Markdown documents in this repo
+(README.md, THE-MAP.md, THE-PROBLEM.md, THE-CAMPAIGN.md, FACTS.md and the
+sub-READMEs). The referee in verify/ is licensed separately under MIT; see
+LICENSE.
+
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+Copyright (c) 2026 Oleksandr Erm
+
+You are free to share and adapt this material for any purpose, including
+commercially, provided you give appropriate credit, link to the licence, and
+indicate if changes were made.
+
+Full licence text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Note on provenance: the graph and the routes are data derived by analysis from
+the Trackmania 2020 map "Haystack 6" by FruitSesh (Trackmania Exchange 323677).
+That map is the author's own work and is NOT redistributed here. This licence
+covers the derived data and the written analysis only.
