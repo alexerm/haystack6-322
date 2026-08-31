@@ -10,6 +10,8 @@ exactly this build.
 This repo is the map as a graph, the best route anyone has produced, and
 everything learned while failing to improve it.
 
+![The endgame conveyor: 24 doors, 8 chains, one finish](viz/endgame-conveyor.png)
+
 ## The open question
 
 > **Claim all 322 link groups in one run, then cross the Finish.**
@@ -46,6 +48,7 @@ data/facing.json           the authored spawn facing of every checkpoint
 data/spire.json            the endgame conveyor as its own graph
 data/author-waypoints.json the author's 323 split times, from the released map
 routes/                    six refereed routes, 315 to 321 groups
+viz/                       figures, and the script that proves they match the data
 archive/                   the 132-route known pool that "novel" is measured against
 solve/                     the CP-SAT model that reaches 321, and the novelty ranker
 verify/                    the referee, and how to submit a claim

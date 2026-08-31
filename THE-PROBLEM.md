@@ -106,6 +106,8 @@ rewrites. This generalises: there are **52 such composites** over four
 (gained, duplicated) pairs, giving 104 excision sites, and **not one has the
 edge that would make the deletion legal** (fact 130).
 
+![The contested corridor: six entry boxes, six targets, identical entries](viz/contested-corridor.png)
+
 ### 3b. Why one-box repair is dead everywhere
 
 **The graph has zero 2-path freedom.** Over 184,432 connected pairs of boxes,

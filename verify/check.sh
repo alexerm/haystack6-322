@@ -80,5 +80,14 @@ if [ "$ARCHIVE" = 1 ]; then
   if [ "$bad" = 0 ]; then echo "  ok   all $n archive routes legal, scores match their filenames"; else fail=1; fi
 fi
 
+# Every structural claim the figures in viz/ make must still hold.
+if [ -f viz/check_figures.py ] && command -v python3 >/dev/null 2>&1; then
+  if python3 viz/check_figures.py >/dev/null 2>&1; then
+    echo "  ok   every figure claim holds"
+  else
+    echo "  FAIL a figure in viz/ no longer matches the data (run: python3 viz/check_figures.py)"; fail=1
+  fi
+fi
+
 if [ "$fail" = 0 ]; then echo "all 6 routes reproduce their measured score"; else echo "CHECK FAILED"; fi
 exit "$fail"

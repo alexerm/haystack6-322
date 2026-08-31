@@ -92,6 +92,11 @@ Finish = 323 steps (fact 20). The opening and the last twelve steps are nearly
 forced. **All the difficulty is in the 307 middle steps**, where the average
 room offers 5.369 onward moves.
 
+![The five kinds of room, each with its graph](viz/room-kinds.png)
+
+Every one of the 568 standard rooms uses the **identical six offsets** — a ring
+at 10 m in antipodal pairs. Learn one room and you have learned all of them.
+
 ## 5. Forced landings — most of the map is not a choice
 
 You materialise at an exact point. If a box happens to sit on that point, you
@@ -147,6 +152,8 @@ is a choice until you cross the finish line.**
 
 62 nodes, 61 edges. Exactly eight have nothing feeding them; exactly one has no
 way onward. Every chain is twelve boxes long.
+
+![The endgame conveyor](viz/endgame-conveyor.png)
 
 **Three platforms.** The Spire occupies the 2×2 room block at x, z ∈ [736, 800)
 — the only place on the map where the one-pit-per-room pattern breaks. The

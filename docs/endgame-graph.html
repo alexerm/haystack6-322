@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Haystack graph viewer</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --rule:#26303b; --ink:#e6edf3; --dim:#8b949e; --faint:#5a6672;
+    --room:#3b82f6; --room-fill:#132a4d; --spawn:#22d3ee; --spawn-fill:#0d3944;
+    --mover:#f59e0b; --mover-fill:#3d2b0c; --strand:#f43f5e; --strand-fill:#3d1220;
+    --outside:#64748b; --outside-fill:#1a222c; --fall:#f59e0b; --lift:#22d3ee; --goal:#e879f9; --goal-fill:#2e0a2b;
+  --group:#a78bfa;
+    --start:#84cc16; --start-fill:#1f2e0a;
+    --path:#34d399; --path-fill:#0c2f26; --path-dim:#2b7a63;
+    --path-a:#22d3ee; --path-b:#e879f9;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden}
+  #app{display:flex;height:100vh}
+  #stage{flex:1;position:relative;min-width:0}
+  svg{width:100%;height:100%;display:block;cursor:grab}
+  svg.panning{cursor:grabbing}
+  aside{width:330px;border-left:1px solid var(--rule);background:var(--panel);
+    padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+  h1{margin:0;font-size:14px;font-weight:600;letter-spacing:.01em}
+  h2{margin:0 0 8px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  .meta{color:var(--dim);font-size:11.5px}
+  .row{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-bottom:1px solid #1d252e}
+  .row:last-child{border-bottom:none}
+  .row span:first-child{color:var(--dim)}
+  .row span:last-child{font-variant-numeric:tabular-nums;text-align:right}
+  .legend div{display:flex;align-items:center;gap:9px;padding:3px 0;color:var(--dim);font-size:11.5px}
+  .sw{width:12px;height:12px;border-radius:3px;flex:none}
+  .ln{width:20px;height:0;border-top:2px solid;flex:none}
+  button,label.file{background:#1f2937;color:var(--ink);border:1px solid var(--rule);
+    border-radius:5px;padding:6px 11px;font:inherit;font-size:11.5px;cursor:pointer}
+  button:hover,label.file:hover{background:#293241}
+  button:focus-visible,label.file:focus-within{outline:2px solid var(--spawn);outline-offset:2px}
+  input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
+  .controls{display:flex;gap:8px;flex-wrap:wrap}
+  #detail{font-size:11.5px}
+  #detail .k{color:var(--dim)}
+  #detail pre{margin:6px 0 0;white-space:pre-wrap;word-break:break-word;color:var(--dim);font-size:11px}
+  .hint{color:var(--faint);font-size:11px;line-height:1.5}
+  .node{cursor:pointer}
+  .node text{pointer-events:none;font-size:10px}
+  .dimmed{opacity:.13}
+  .banner{position:absolute;left:16px;top:14px;color:var(--faint);font-size:11px;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <svg id="svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#5a6672"/></marker>
+        <marker id="arrow-lit" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+        <marker id="arrow-lift" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#22d3ee"/></marker>
+        <marker id="arrow-fall" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/></marker>
+        <marker id="arrow-path" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+        <marker id="arrow-path-gap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2b7a63"/></marker>
+      </defs>
+      <g id="view">
+      <g id="edges"></g><g id="path"></g><g id="nodes"></g>
+    </g></svg>
+    <div class="banner" id="banner"></div>
+    <div class="banner" id="axis" style="top:auto;bottom:12px;left:16px"></div>
+  </div>
+  <aside>
+    <div>
+      <h1>Haystack graph</h1>
+      <div class="meta" id="model"></div>
+    </div>
+
+    <div>
+      <h2>Graph</h2>
+      <div class="row"><span>checkpoints</span><span id="s-nodes">—</span></div>
+      <div class="row"><span>distinct groups</span><span id="s-groups">—</span></div>
+      <div class="row"><span>groups w/ &gt;1 CP here</span><span id="s-dup">—</span></div>
+      <div class="row"><span>terminal (strand)</span><span id="s-strand">—</span></div>
+      <div class="row"><span>edges</span><span id="s-edges">—</span></div>
+    </div>
+
+    <div>
+      <h2>Path</h2>
+      <div class="row"><span>loaded</span><span id="p-name">— none —</span></div>
+      <div class="row"><span>steps in path</span><span id="p-total">—</span></div>
+      <div class="row"><span>present in graph</span><span id="p-present">—</span></div>
+      <div class="row"><span>coverage here</span><span id="p-cov">—</span></div>
+      <div class="row"><span>off-graph jumps</span><span id="p-gaps">—</span></div>
+      <div class="controls" style="margin-top:10px">
+        <label class="file">Load path JSON<input type="file" id="pfile" accept=".json,application/json"></label>
+        <button id="pclear">Clear path</button>
+        <button id="pfit">Fit to path</button>
+        <button id="phide">Hide off-path</button>
+      </div>
+      <p class="hint" style="margin:8px 0 0">
+        A route file (<code>{route:[{cp}]}</code> or <code>{steps:[{exit:{cp}}]}</code>).
+        Only its checkpoints that exist in the current graph are drawn, so the same
+        path can be viewed on the full map or any partial graph. Dashed green =
+        the path leaves and re-enters this graph between two shown checkpoints.
+      </p>
+    </div>
+
+    <div>
+      <h2>Legend</h2>
+      <div class="legend">
+        <div><i class="sw" style="background:var(--start-fill);border:1.5px solid var(--start)"></i>SPAWN — run start</div>
+        <div><i class="sw" style="background:var(--spawn-fill);border:1.5px solid var(--spawn)"></i>drivable from spawn</div>
+        <div><i class="sw" style="background:var(--mover-fill);border:1.5px solid var(--mover)"></i>mover checkpoint</div>
+        <div><i class="sw" style="background:var(--strand-fill);border:1.5px solid var(--strand)"></i>terminal — strands you</div>
+        <div><i class="sw" style="background:transparent;border:2px dashed var(--group)"></i>same group as selected</div>
+        <div><i class="ln" style="border-color:var(--faint)"></i>claim, respawn, drive to</div>
+        <div><i class="sw" style="background:var(--path-fill);border:2px solid var(--path)"></i>on the loaded path</div>
+        <div><i class="ln" style="border-color:var(--path)"></i>path step (both ends here)</div>
+        <div><i class="ln" style="border-color:var(--path-dim);border-top-style:dashed"></i>path jumps off-graph</div>
+      </div>
+    </div>
+
+    <div>
+      <h2>Selection</h2>
+      <div id="detail" class="hint">Click a checkpoint.</div>
+    </div>
+
+    <div>
+      <h2>View</h2>
+      <div class="controls">
+        <button id="relayout">Re-layout</button>
+        <button id="fit">Fit</button>
+        <button id="toggle-mode">Layout: layered</button>
+        <button id="toggle-strand">Hide terminal</button>
+        <label class="file">Load graph JSON<input type="file" id="file" accept=".json,application/json"></label>
+      </div>
+      <p class="hint" style="margin:10px 0 0">
+        Drag nodes to pin. Scroll to zoom, drag background to pan.
+        Accepts any <code>{nodes,edges}</code> file from <code>the graph emitter</code>.
+      </p>
+    </div>
+  </aside>
+</div>
+
+<script>
+const EMBEDDED = {"meta":{"map":"Haystack 6 (TMX 323677)","rootRoom":"FINISH (the tree is rooted at the goal)","depth":12,"model":"conveyor: 24 doors teleport you onto the upper or lower deck, each landing you on one of 8 chain heads (3 per head); from there every step is a forced landing — 3 ring, corner pit, 1 vertical, 5 shared middle, CP#104, Finish","verified":"in game, 2026-07-22","forcedRadius":5.5,"nBoxes":66,"nChains":8,"chainLength":12,"nForcedEdges":61,"nDoors":24,"spireGroups":49,"spireOnlyGroups":[67],"platforms":[{"name":"upper","deckTop":167,"ring":160,"cells":16,"vertical":152},{"name":"middle","deckTop":143,"rotor":150,"ring":144,"cells":20,"shared":true},{"name":"lower","deckTop":135,"ring":128,"cells":16,"vertical":136}]},"chains":[{"id":0,"head":18,"deck":"lower","boxes":[18,17,16,14,15,22,23,50,0,1,104,-1],"groups":[1163207569,2110775393,1191525713,1324517265,2085715921,1875528577,1795403329,1402072641,1227757121,2056886753,67],"scarce":[{"box":14,"group":1324517265,"size":3},{"box":22,"group":1875528577,"size":2},{"box":104,"group":67,"size":1}]},{"id":1,"head":35,"deck":"lower","boxes":[35,34,33,12,13,36,37,49,2,3,104,-1],"groups":[1532769969,1855448769,1341841921,1387778849,1492404801,1284970017,2085715921,1912442081,1480842769,2046231233,67],"scarce":[{"box":12,"group":1387778849,"size":3},{"box":36,"group":1284970017,"size":3},{"box":104,"group":67,"size":1}]},{"id":2,"head":45,"deck":"lower","boxes":[45,44,43,8,9,47,46,48,5,4,104,-1],"groups":[1949788289,1302346769,1543323537,1052392961,1492404801,1324517265,1298681601,1015978849,1104237041,1920032561,67],"scarce":[{"box":8,"group":1052392961,"size":2},{"box":47,"group":1324517265,"size":3},{"box":104,"group":67,"size":1}]},{"id":3,"head":51,"deck":"lower","boxes":[51,52,53,11,10,63,62,61,6,7,104,-1],"groups":[1628817185,1193032753,1085341569,1387778849,2085715921,1973621873,1492404801,1299616401,1772040305,2107044497,67],"scarce":[{"box":11,"group":1387778849,"size":3},{"box":63,"group":1973621873,"size":2},{"box":104,"group":67,"size":1}]},{"id":4,"head":19,"deck":"upper","boxes":[19,20,21,25,24,22,23,50,0,1,104,-1],"groups":[1279030593,1729111137,1299569409,1192721329,1298681601,1875528577,1795403329,1402072641,1227757121,2056886753,67],"scarce":[{"box":25,"group":1192721329,"size":2},{"box":22,"group":1875528577,"size":2},{"box":104,"group":67,"size":1}]},{"id":5,"head":30,"deck":"upper","boxes":[30,31,32,39,38,36,37,49,2,3,104,-1],"groups":[1320754721,1068431553,1747584577,2123535873,1298681601,1284970017,2085715921,1912442081,1480842769,2046231233,67],"scarce":[{"box":39,"group":2123535873,"size":3},{"box":36,"group":1284970017,"size":3},{"box":104,"group":67,"size":1}]},{"id":6,"head":40,"deck":"upper","boxes":[40,41,42,60,59,47,46,48,5,4,104,-1],"groups":[1886847249,1567758369,1798027377,2123535873,1795403329,1324517265,1298681601,1015978849,1104237041,1920032561,67],"scarce":[{"box":60,"group":2123535873,"size":3},{"box":47,"group":1324517265,"size":3},{"box":104,"group":67,"size":1}]},{"id":7,"head":58,"deck":"upper","boxes":[58,57,56,55,54,63,62,61,6,7,104,-1],"groups":[1872820001,2046231233,2084247777,1284970017,1795403329,1973621873,1492404801,1299616401,1772040305,2107044497,67],"scarce":[{"box":55,"group":1284970017,"size":3},{"box":63,"group":1973621873,"size":2},{"box":104,"group":67,"size":1}]}],"nodes":[{"id":0,"kind":"cp","variant":"EndFW","pos":[762,144,777],"spawn":[766.000000349691,148.49999965030887,775.9999998251544],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":3,"terminal":false,"mover":true,"group":1227757121,"groupSize":21,"groupOutside":20,"platform":"middle","role":"middle","chains":[0,4],"step":8,"onChain":true},{"id":1,"kind":"cp","variant":"EndFW","pos":[769,144,774],"spawn":[768.0000003496912,148.49999965030887,769.9999995191747],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":2,"terminal":false,"mover":true,"group":2056886753,"groupSize":21,"groupOutside":20,"platform":"middle","role":"middle","chains":[0,4],"step":9,"onChain":true},{"id":2,"kind":"cp","variant":"EndFW","pos":[759,144,762],"spawn":[760,148.49999965030887,766.0000003934025],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":3,"terminal":false,"mover":true,"group":1480842769,"groupSize":21,"groupOutside":20,"platform":"middle","role":"middle","chains":[1,5],"step":8,"onChain":true},{"id":3,"kind":"cp","variant":"EndFW","pos":[762,144,769],"spawn":[766.000000349691,148.49999965030887,767.9999998251544],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":2,"terminal":false,"mover":true,"group":2046231233,"groupSize":22,"groupOutside":20,"platform":"middle","role":"middle","chains":[1,5],"step":9,"onChain":true},{"id":4,"kind":"cp","variant":"EndFW","pos":[774,144,767],"spawn":[769.9999996820954,148.49999965030887,768.0000003019916],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":2,"terminal":false,"mover":true,"group":1920032561,"groupSize":21,"groupOutside":20,"platform":"middle","role":"middle","chains":[2,6],"step":9,"onChain":true},{"id":5,"kind":"cp","variant":"EndFW","pos":[777,144,774],"spawn":[776.0000003496912,148.49999965030887,769.9999995191747],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":3,"terminal":false,"mover":true,"group":1104237041,"groupSize":22,"groupOutside":21,"platform":"middle","role":"middle","chains":[2,6],"step":8,"onChain":true},{"id":6,"kind":"cp","variant":"EndFW","pos":[774,144,759],"spawn":[769.9999996820954,148.49999965030887,760.0000003019916],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":3,"terminal":false,"mover":true,"group":1772040305,"groupSize":21,"groupOutside":20,"platform":"middle","role":"middle","chains":[3,7],"step":8,"onChain":true},{"id":7,"kind":"cp","variant":"EndFW","pos":[767,144,762],"spawn":[768,148.49999965030887,766.0000003934025],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":2,"terminal":false,"mover":true,"group":2107044497,"groupSize":20,"groupOutside":19,"platform":"middle","role":"middle","chains":[3,7],"step":9,"onChain":true},{"id":8,"kind":"cp","variant":"EndU","pos":[758,128,783],"spawn":[761.9999990264245,140.00000034969108,783.9999996980084],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":8,"terminal":false,"mover":true,"group":1052392961,"groupSize":2,"groupOutside":1,"platform":"lower","role":"corner","chains":[2],"step":3,"onChain":true},{"id":9,"kind":"cp","variant":"EndU","pos":[762,136,785],"spawn":[758.000001005362,148.00000034969108,784.0000001748455],"room":"lower vertical y=136","spawnRoom":"lower vertical y=136","depth":7,"terminal":false,"mover":true,"group":1492404801,"groupSize":6,"groupOutside":2,"platform":"lower","role":"vertical","chains":[2],"step":4,"onChain":true},{"id":10,"kind":"cp","variant":"EndU","pos":[785,136,774],"spawn":[783.999999650309,148.00000034969108,777.9999988635038],"room":"lower vertical y=136","spawnRoom":"lower vertical y=136","depth":7,"terminal":false,"mover":true,"group":2085715921,"groupSize":6,"groupOutside":2,"platform":"lower","role":"vertical","chains":[3],"step":4,"onChain":true},{"id":11,"kind":"cp","variant":"EndU","pos":[783,128,778],"spawn":[784,140.00000034969108,774.0000010490734],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":8,"terminal":false,"mover":true,"group":1387778849,"groupSize":3,"groupOutside":1,"platform":"lower","role":"corner","chains":[3],"step":3,"onChain":true},{"id":12,"kind":"cp","variant":"EndU","pos":[778,128,753],"spawn":[774.000001005362,140.00000034969108,752.0000001748455],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":8,"terminal":false,"mover":true,"group":1387778849,"groupSize":3,"groupOutside":1,"platform":"lower","role":"corner","chains":[1],"step":3,"onChain":true},{"id":13,"kind":"cp","variant":"EndU","pos":[774,136,751],"spawn":[777.9999990264245,148.00000034969108,751.9999996980084],"room":"lower vertical y=136","spawnRoom":"lower vertical y=136","depth":7,"terminal":false,"mover":true,"group":1492404801,"groupSize":6,"groupOutside":2,"platform":"lower","role":"vertical","chains":[1],"step":4,"onChain":true},{"id":14,"kind":"cp","variant":"EndU","pos":[753,128,758],"spawn":[751.999999650309,140.00000034969108,761.9999988635038],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":8,"terminal":false,"mover":true,"group":1324517265,"groupSize":3,"groupOutside":1,"platform":"lower","role":"corner","chains":[0],"step":3,"onChain":true},{"id":15,"kind":"cp","variant":"EndU","pos":[751,136,762],"spawn":[752,148.00000034969108,758.0000010490734],"room":"lower vertical y=136","spawnRoom":"lower vertical y=136","depth":7,"terminal":false,"mover":true,"group":2085715921,"groupSize":6,"groupOutside":2,"platform":"lower","role":"vertical","chains":[0],"step":4,"onChain":true},{"id":16,"kind":"cp","variant":"EndFW","pos":[753,128,766],"spawn":[752.0000003496912,132.49999965030887,761.9999995191747],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":9,"terminal":false,"mover":true,"group":1191525713,"groupSize":20,"groupOutside":19,"platform":"lower","role":"ring","chains":[0],"step":2,"onChain":true},{"id":17,"kind":"cp","variant":"EndFW","pos":[753,128,774],"spawn":[752.0000003496912,132.49999965030887,769.9999995191747],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":10,"terminal":false,"mover":true,"group":2110775393,"groupSize":21,"groupOutside":20,"platform":"lower","role":"ring","chains":[0],"step":1,"onChain":true},{"id":18,"kind":"cp","variant":"EndFW","pos":[753,128,782],"spawn":[752.0000003496912,132.49999965030887,777.9999995191747],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":11,"terminal":false,"mover":true,"group":1163207569,"groupSize":22,"groupOutside":21,"platform":"lower","role":"ring","chains":[0],"step":0,"onChain":true},{"id":19,"kind":"cp","variant":"EndFW","pos":[753,160,782],"spawn":[752.0000003496912,164.49999965030887,777.9999995191747],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":11,"terminal":false,"mover":true,"group":1279030593,"groupSize":22,"groupOutside":21,"platform":"upper","role":"ring","chains":[4],"step":0,"onChain":true},{"id":20,"kind":"cp","variant":"EndFW","pos":[753,160,774],"spawn":[752.0000003496912,164.49999965030887,769.9999995191747],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":10,"terminal":false,"mover":true,"group":1729111137,"groupSize":23,"groupOutside":22,"platform":"upper","role":"ring","chains":[4],"step":1,"onChain":true},{"id":21,"kind":"cp","variant":"EndFW","pos":[753,160,766],"spawn":[752.0000003496912,164.49999965030887,761.9999995191747],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":9,"terminal":false,"mover":true,"group":1299569409,"groupSize":22,"groupOutside":21,"platform":"upper","role":"ring","chains":[4],"step":2,"onChain":true},{"id":22,"kind":"cp","variant":"EndFW","pos":[751,144,762],"spawn":[752,148.49999965030887,766.0000003934025],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":6,"terminal":false,"mover":true,"group":1875528577,"groupSize":2,"groupOutside":1,"platform":"middle","role":"middle","chains":[0,4],"step":5,"onChain":true},{"id":23,"kind":"cp","variant":"EndFW","pos":[751,144,770],"spawn":[752,148.49999965030887,774.0000003934025],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":5,"terminal":false,"mover":true,"group":1795403329,"groupSize":6,"groupOutside":2,"platform":"middle","role":"middle","chains":[0,4],"step":6,"onChain":true},{"id":24,"kind":"cp","variant":"EndD","pos":[751,152,762],"spawn":[752,148.00000043711393,756.999999650309],"room":"upper vertical y=152","spawnRoom":"upper vertical y=152","depth":7,"terminal":false,"mover":true,"group":1298681601,"groupSize":6,"groupOutside":2,"platform":"upper","role":"vertical","chains":[4],"step":4,"onChain":true},{"id":25,"kind":"cp","variant":"EndD","pos":[753,160,758],"spawn":[751.999999562886,156.00000043711393,763.0000002622683],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":8,"terminal":false,"mover":true,"group":1192721329,"groupSize":2,"groupOutside":1,"platform":"upper","role":"corner","chains":[4],"step":3,"onChain":true},{"id":30,"kind":"cp","variant":"EndFW","pos":[754,160,753],"spawn":[758.000000349691,164.49999965030887,751.9999998251544],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":11,"terminal":false,"mover":true,"group":1320754721,"groupSize":22,"groupOutside":21,"platform":"upper","role":"ring","chains":[5],"step":0,"onChain":true},{"id":31,"kind":"cp","variant":"EndFW","pos":[762,160,753],"spawn":[766.000000349691,164.49999965030887,751.9999998251544],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":10,"terminal":false,"mover":true,"group":1068431553,"groupSize":22,"groupOutside":21,"platform":"upper","role":"ring","chains":[5],"step":1,"onChain":true},{"id":32,"kind":"cp","variant":"EndFW","pos":[770,160,753],"spawn":[774.000000349691,164.49999965030887,751.9999998251544],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":9,"terminal":false,"mover":true,"group":1747584577,"groupSize":22,"groupOutside":21,"platform":"upper","role":"ring","chains":[5],"step":2,"onChain":true},{"id":33,"kind":"cp","variant":"EndFW","pos":[770,128,753],"spawn":[774.000000349691,132.49999965030887,751.9999998251544],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":9,"terminal":false,"mover":true,"group":1341841921,"groupSize":22,"groupOutside":21,"platform":"lower","role":"ring","chains":[1],"step":2,"onChain":true},{"id":34,"kind":"cp","variant":"EndFW","pos":[762,128,753],"spawn":[766.000000349691,132.49999965030887,751.9999998251544],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":10,"terminal":false,"mover":true,"group":1855448769,"groupSize":22,"groupOutside":21,"platform":"lower","role":"ring","chains":[1],"step":1,"onChain":true},{"id":35,"kind":"cp","variant":"EndFW","pos":[754,128,753],"spawn":[758.000000349691,132.49999965030887,751.9999998251544],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":11,"terminal":false,"mover":true,"group":1532769969,"groupSize":22,"groupOutside":21,"platform":"lower","role":"ring","chains":[1],"step":0,"onChain":true},{"id":36,"kind":"cp","variant":"EndFW","pos":[774,144,751],"spawn":[769.9999996820954,148.49999965030887,752.0000003019916],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":6,"terminal":false,"mover":true,"group":1284970017,"groupSize":3,"groupOutside":1,"platform":"middle","role":"middle","chains":[1,5],"step":5,"onChain":true},{"id":37,"kind":"cp","variant":"EndFW","pos":[766,144,751],"spawn":[761.9999996820954,148.49999965030887,752.0000003019916],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":5,"terminal":false,"mover":true,"group":2085715921,"groupSize":6,"groupOutside":2,"platform":"middle","role":"middle","chains":[1,5],"step":6,"onChain":true},{"id":38,"kind":"cp","variant":"EndD","pos":[774,152,751],"spawn":[779.000000425189,148.00000043711393,751.9999996225105],"room":"upper vertical y=152","spawnRoom":"upper vertical y=152","depth":7,"terminal":false,"mover":true,"group":1298681601,"groupSize":6,"groupOutside":2,"platform":"upper","role":"vertical","chains":[5],"step":4,"onChain":true},{"id":39,"kind":"cp","variant":"EndD","pos":[778,160,753],"spawn":[772.9999996065975,156.00000043711393,752.0000002185569],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":8,"terminal":false,"mover":true,"group":2123535873,"groupSize":3,"groupOutside":1,"platform":"upper","role":"corner","chains":[5],"step":3,"onChain":true},{"id":40,"kind":"cp","variant":"EndFW","pos":[782,160,783],"spawn":[777.9999996820954,164.49999965030887,784.0000003019916],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":11,"terminal":false,"mover":true,"group":1886847249,"groupSize":23,"groupOutside":22,"platform":"upper","role":"ring","chains":[6],"step":0,"onChain":true},{"id":41,"kind":"cp","variant":"EndFW","pos":[774,160,783],"spawn":[769.9999996820954,164.49999965030887,784.0000003019916],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":10,"terminal":false,"mover":true,"group":1567758369,"groupSize":23,"groupOutside":22,"platform":"upper","role":"ring","chains":[6],"step":1,"onChain":true},{"id":42,"kind":"cp","variant":"EndFW","pos":[766,160,783],"spawn":[761.9999996820954,164.49999965030887,784.0000003019916],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":9,"terminal":false,"mover":true,"group":1798027377,"groupSize":22,"groupOutside":21,"platform":"upper","role":"ring","chains":[6],"step":2,"onChain":true},{"id":43,"kind":"cp","variant":"EndFW","pos":[766,128,783],"spawn":[761.9999996820954,132.49999965030887,784.0000003019916],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":9,"terminal":false,"mover":true,"group":1543323537,"groupSize":20,"groupOutside":19,"platform":"lower","role":"ring","chains":[2],"step":2,"onChain":true},{"id":44,"kind":"cp","variant":"EndFW","pos":[774,128,783],"spawn":[769.9999996820954,132.49999965030887,784.0000003019916],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":10,"terminal":false,"mover":true,"group":1302346769,"groupSize":22,"groupOutside":21,"platform":"lower","role":"ring","chains":[2],"step":1,"onChain":true},{"id":45,"kind":"cp","variant":"EndFW","pos":[782,128,783],"spawn":[777.9999996820954,132.49999965030887,784.0000003019916],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":11,"terminal":false,"mover":true,"group":1949788289,"groupSize":21,"groupOutside":20,"platform":"lower","role":"ring","chains":[2],"step":0,"onChain":true},{"id":46,"kind":"cp","variant":"EndFW","pos":[770,144,785],"spawn":[774.000000349691,148.49999965030887,783.9999998251544],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":5,"terminal":false,"mover":true,"group":1298681601,"groupSize":6,"groupOutside":2,"platform":"middle","role":"middle","chains":[2,6],"step":6,"onChain":true},{"id":47,"kind":"cp","variant":"EndFW","pos":[762,144,785],"spawn":[766.000000349691,148.49999965030887,783.9999998251544],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":6,"terminal":false,"mover":true,"group":1324517265,"groupSize":3,"groupOutside":1,"platform":"middle","role":"middle","chains":[2,6],"step":5,"onChain":true},{"id":48,"kind":"cp","variant":"EndFW","pos":[777,144,782],"spawn":[776.0000003496912,148.49999965030887,777.9999995191747],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":4,"terminal":false,"mover":true,"group":1015978849,"groupSize":20,"groupOutside":19,"platform":"middle","role":"middle","chains":[2,6],"step":7,"onChain":true},{"id":49,"kind":"cp","variant":"EndFW","pos":[759,144,754],"spawn":[760,148.49999965030887,758.0000003934025],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":4,"terminal":false,"mover":true,"group":1912442081,"groupSize":23,"groupOutside":22,"platform":"middle","role":"middle","chains":[1,5],"step":7,"onChain":true},{"id":50,"kind":"cp","variant":"EndFW","pos":[754,144,777],"spawn":[758.000000349691,148.49999965030887,775.9999998251544],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":4,"terminal":false,"mover":true,"group":1402072641,"groupSize":21,"groupOutside":20,"platform":"middle","role":"middle","chains":[0,4],"step":7,"onChain":true},{"id":51,"kind":"cp","variant":"EndFW","pos":[783,128,754],"spawn":[784,132.49999965030887,758.0000003934025],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":11,"terminal":false,"mover":true,"group":1628817185,"groupSize":22,"groupOutside":21,"platform":"lower","role":"ring","chains":[3],"step":0,"onChain":true},{"id":52,"kind":"cp","variant":"EndFW","pos":[783,128,762],"spawn":[784,132.49999965030887,766.0000003934025],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":10,"terminal":false,"mover":true,"group":1193032753,"groupSize":21,"groupOutside":20,"platform":"lower","role":"ring","chains":[3],"step":1,"onChain":true},{"id":53,"kind":"cp","variant":"EndFW","pos":[783,128,770],"spawn":[784,132.49999965030887,774.0000003934025],"room":"lower ring y=128","spawnRoom":"lower ring y=128","depth":9,"terminal":false,"mover":true,"group":1085341569,"groupSize":22,"groupOutside":21,"platform":"lower","role":"ring","chains":[3],"step":2,"onChain":true},{"id":54,"kind":"cp","variant":"EndD","pos":[785,152,774],"spawn":[783.999999562886,148.00000043711393,779.0000002622683],"room":"upper vertical y=152","spawnRoom":"upper vertical y=152","depth":7,"terminal":false,"mover":true,"group":1795403329,"groupSize":6,"groupOutside":2,"platform":"upper","role":"vertical","chains":[7],"step":4,"onChain":true},{"id":55,"kind":"cp","variant":"EndD","pos":[783,160,778],"spawn":[784,156.00000043711393,772.999999650309],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":8,"terminal":false,"mover":true,"group":1284970017,"groupSize":3,"groupOutside":1,"platform":"upper","role":"corner","chains":[7],"step":3,"onChain":true},{"id":56,"kind":"cp","variant":"EndFW","pos":[783,160,770],"spawn":[784,164.49999965030887,774.0000003934025],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":9,"terminal":false,"mover":true,"group":2084247777,"groupSize":20,"groupOutside":19,"platform":"upper","role":"ring","chains":[7],"step":2,"onChain":true},{"id":57,"kind":"cp","variant":"EndFW","pos":[783,160,762],"spawn":[784,164.49999965030887,766.0000003934025],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":10,"terminal":false,"mover":true,"group":2046231233,"groupSize":22,"groupOutside":20,"platform":"upper","role":"ring","chains":[7],"step":1,"onChain":true},{"id":58,"kind":"cp","variant":"EndFW","pos":[783,160,754],"spawn":[784,164.49999965030887,758.0000003934025],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":11,"terminal":false,"mover":true,"group":1872820001,"groupSize":22,"groupOutside":21,"platform":"upper","role":"ring","chains":[7],"step":0,"onChain":true},{"id":59,"kind":"cp","variant":"EndD","pos":[762,152,785],"spawn":[756.9999996065975,148.00000043711393,784.0000002185569],"room":"upper vertical y=152","spawnRoom":"upper vertical y=152","depth":7,"terminal":false,"mover":true,"group":1795403329,"groupSize":6,"groupOutside":2,"platform":"upper","role":"vertical","chains":[6],"step":4,"onChain":true},{"id":60,"kind":"cp","variant":"EndD","pos":[758,160,783],"spawn":[763.000000425189,156.00000043711393,783.9999996225105],"room":"upper ring y=160","spawnRoom":"upper ring y=160","depth":8,"terminal":false,"mover":true,"group":2123535873,"groupSize":3,"groupOutside":1,"platform":"upper","role":"corner","chains":[6],"step":3,"onChain":true},{"id":61,"kind":"cp","variant":"EndFW","pos":[782,144,759],"spawn":[777.9999996820954,148.49999965030887,760.0000003019916],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":4,"terminal":false,"mover":true,"group":1299616401,"groupSize":21,"groupOutside":20,"platform":"middle","role":"middle","chains":[3,7],"step":7,"onChain":true},{"id":62,"kind":"cp","variant":"EndFW","pos":[785,144,766],"spawn":[784.0000003496912,148.49999965030887,761.9999995191747],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":5,"terminal":false,"mover":true,"group":1492404801,"groupSize":6,"groupOutside":2,"platform":"middle","role":"middle","chains":[3,7],"step":6,"onChain":true},{"id":63,"kind":"cp","variant":"EndFW","pos":[785,144,774],"spawn":[784.0000003496912,148.49999965030887,769.9999995191747],"room":"middle y=144 (shared)","spawnRoom":"middle y=144 (shared)","depth":6,"terminal":false,"mover":true,"group":1973621873,"groupSize":2,"groupOutside":1,"platform":"middle","role":"middle","chains":[3,7],"step":5,"onChain":true},{"id":104,"kind":"cp","variant":"CP","pos":[767,146,766],"spawn":[767,146,766],"room":"goal shaft y=146","spawnRoom":"goal shaft y=146","depth":1,"terminal":false,"mover":true,"group":67,"groupSize":1,"groupOutside":0,"platform":"middle","role":"goal-cp","chains":[0,1,2,3,4,5,6,7],"step":10,"onChain":true},{"id":-1,"kind":"goal","variant":"FINISH","pos":[767,143,766],"spawn":[767,143,766],"room":"finish chamber y=143","spawnRoom":"finish chamber y=143","depth":0,"terminal":false,"mover":true,"group":-1,"groupSize":1,"groupOutside":0,"platform":"middle","role":"finish","chains":[0,1,2,3,4,5,6,7],"step":11,"onChain":true},{"id":1552,"kind":"cp","variant":"Up","pos":[777,96,790],"spawn":[783.9999993960167,135,785.9999989430295],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1438999185,"groupSize":21,"groupOutside":21,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":1558,"kind":"cp","variant":"Up","pos":[745,96,790],"spawn":[751.9999993960167,135,785.9999989430295],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1729111137,"groupSize":23,"groupOutside":22,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":1635,"kind":"cp","variant":"Up","pos":[777,96,758],"spawn":[783.9999993960167,135,753.9999989430295],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1601185521,"groupSize":20,"groupOutside":20,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":1641,"kind":"cp","variant":"Up","pos":[745,96,758],"spawn":[751.9999993960167,135,753.9999989430295],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1481675745,"groupSize":22,"groupOutside":22,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":2579,"kind":"cp","variant":"FW","pos":[783,128,806],"spawn":[784,135,786],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":2143423425,"groupSize":22,"groupOutside":22,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":2585,"kind":"cp","variant":"FW","pos":[751,128,806],"spawn":[752,135,786],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1666030161,"groupSize":22,"groupOutside":22,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":2657,"kind":"cp","variant":"FWSide","pos":[806,128,781],"spawn":[785.9999997735064,135,783.999998490042],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1790626993,"groupSize":21,"groupOutside":21,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":2662,"kind":"cp","variant":"FWSide","pos":[730,128,787],"spawn":[750.0000001311341,135,784.0000008742278],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1409441521,"groupSize":22,"groupOutside":22,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":2727,"kind":"cp","variant":"FWSide","pos":[806,128,749],"spawn":[785.9999997735064,135,751.999998490042],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1227757121,"groupSize":21,"groupOutside":20,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":2732,"kind":"cp","variant":"FWSide","pos":[730,128,755],"spawn":[750.0000001311341,135,752.0000008742278],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1747584577,"groupSize":22,"groupOutside":21,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":2800,"kind":"cp","variant":"FW","pos":[785,128,730],"spawn":[784.000003019916,135,750.0000001509956],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":2105002817,"groupSize":21,"groupOutside":21,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":2806,"kind":"cp","variant":"FW","pos":[753,128,730],"spawn":[752.000003019916,135,750.0000001509956],"room":"outside -> lower deck","spawnRoom":"lower deck y=135","depth":12,"terminal":false,"mover":true,"group":1320754721,"groupSize":22,"groupOutside":21,"platform":"lower","role":"door","chains":[],"step":-1,"onChain":false},{"id":3682,"kind":"cp","variant":"FW","pos":[783,160,806],"spawn":[784,167,786],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1037169521,"groupSize":21,"groupOutside":21,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":3688,"kind":"cp","variant":"FW","pos":[751,160,806],"spawn":[752,167,786],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1972812849,"groupSize":21,"groupOutside":21,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":3760,"kind":"cp","variant":"FWSide","pos":[806,160,781],"spawn":[785.9999997735064,167,783.999998490042],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1980633313,"groupSize":21,"groupOutside":21,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":3765,"kind":"cp","variant":"FWSide","pos":[730,160,787],"spawn":[750.0000001311341,167,784.0000008742278],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1336942161,"groupSize":22,"groupOutside":22,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":3830,"kind":"cp","variant":"FWSide","pos":[806,160,749],"spawn":[785.9999997735064,167,751.999998490042],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1920032561,"groupSize":21,"groupOutside":20,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":3835,"kind":"cp","variant":"FWSide","pos":[730,160,755],"spawn":[750.0000001311341,167,752.0000008742278],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1000441617,"groupSize":22,"groupOutside":22,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":3903,"kind":"cp","variant":"FW","pos":[785,160,730],"spawn":[784.000003019916,167,750.0000001509956],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1008433505,"groupSize":22,"groupOutside":22,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":3909,"kind":"cp","variant":"FW","pos":[753,160,730],"spawn":[752.000003019916,167,750.0000001509956],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":2125456081,"groupSize":21,"groupOutside":21,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":4365,"kind":"cp","variant":"Down","pos":[759,192,778],"spawn":[752,167,782],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1142469121,"groupSize":21,"groupOutside":21,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":4371,"kind":"cp","variant":"Down","pos":[791,192,746],"spawn":[784,167,750],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1381035905,"groupSize":21,"groupOutside":21,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":4377,"kind":"cp","variant":"Down","pos":[791,192,778],"spawn":[784,167,782],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1863603393,"groupSize":20,"groupOutside":20,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false},{"id":4383,"kind":"cp","variant":"Down","pos":[759,192,746],"spawn":[752,167,750],"room":"outside -> upper deck","spawnRoom":"upper deck y=167","depth":12,"terminal":false,"mover":true,"group":1365560593,"groupSize":20,"groupOutside":20,"platform":"upper","role":"door","chains":[],"step":-1,"onChain":false}],"edges":[{"source":0,"target":1,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":1,"target":104,"kind":"elevator","forced":true,"drop":2.5,"dist":4.1},{"source":2,"target":3,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":3,"target":104,"kind":"elevator","forced":true,"drop":2.5,"dist":2.2},{"source":4,"target":104,"kind":"elevator","forced":true,"drop":2.5,"dist":3.6},{"source":5,"target":4,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":6,"target":7,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":7,"target":104,"kind":"elevator","forced":true,"drop":2.5,"dist":1},{"source":8,"target":9,"kind":"elevator","forced":true,"drop":4,"dist":1},{"source":9,"target":47,"kind":"elevator","forced":true,"drop":4,"dist":4.1},{"source":10,"target":63,"kind":"elevator","forced":true,"drop":4,"dist":4.1},{"source":11,"target":10,"kind":"elevator","forced":true,"drop":4,"dist":1},{"source":12,"target":13,"kind":"elevator","forced":true,"drop":4,"dist":1},{"source":13,"target":36,"kind":"elevator","forced":true,"drop":4,"dist":4.1},{"source":14,"target":15,"kind":"elevator","forced":true,"drop":4,"dist":1},{"source":15,"target":22,"kind":"elevator","forced":true,"drop":4,"dist":4.1},{"source":16,"target":14,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":17,"target":16,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":18,"target":17,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":19,"target":20,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":20,"target":21,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":21,"target":25,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":22,"target":23,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":23,"target":50,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":24,"target":22,"kind":"fall","forced":true,"drop":4,"dist":5.1},{"source":25,"target":24,"kind":"fall","forced":true,"drop":4,"dist":1.4},{"source":30,"target":31,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":31,"target":32,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":32,"target":39,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":33,"target":12,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":34,"target":33,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":35,"target":34,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":36,"target":37,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":37,"target":49,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":38,"target":36,"kind":"fall","forced":true,"drop":4,"dist":5.1},{"source":39,"target":38,"kind":"fall","forced":true,"drop":4,"dist":1.4},{"source":40,"target":41,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":41,"target":42,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":42,"target":60,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":43,"target":8,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":44,"target":43,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":45,"target":44,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":46,"target":48,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":47,"target":46,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":48,"target":5,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":49,"target":2,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":50,"target":0,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":51,"target":52,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":52,"target":53,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":53,"target":11,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":54,"target":63,"kind":"fall","forced":true,"drop":4,"dist":5.1},{"source":55,"target":54,"kind":"fall","forced":true,"drop":4,"dist":1.4},{"source":56,"target":55,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":57,"target":56,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":58,"target":57,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":59,"target":47,"kind":"fall","forced":true,"drop":4,"dist":5.1},{"source":60,"target":59,"kind":"fall","forced":true,"drop":4,"dist":1.4},{"source":61,"target":6,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":62,"target":61,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":63,"target":62,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":104,"target":-1,"kind":"fall","forced":true,"drop":3,"dist":0},{"source":1552,"target":45,"kind":"teleport","deck":"lower","dist":3.6},{"source":1558,"target":18,"kind":"teleport","deck":"lower","dist":4.1},{"source":1635,"target":51,"kind":"teleport","deck":"lower","dist":1},{"source":1641,"target":35,"kind":"teleport","deck":"lower","dist":2.2},{"source":2579,"target":45,"kind":"teleport","deck":"lower","dist":3.6},{"source":2585,"target":18,"kind":"teleport","deck":"lower","dist":4.1},{"source":2657,"target":45,"kind":"teleport","deck":"lower","dist":4.1},{"source":2662,"target":18,"kind":"teleport","deck":"lower","dist":3.6},{"source":2727,"target":51,"kind":"teleport","deck":"lower","dist":3.6},{"source":2732,"target":35,"kind":"teleport","deck":"lower","dist":4.1},{"source":2800,"target":51,"kind":"teleport","deck":"lower","dist":4.1},{"source":2806,"target":35,"kind":"teleport","deck":"lower","dist":3.6},{"source":3682,"target":40,"kind":"teleport","deck":"upper","dist":3.6},{"source":3688,"target":19,"kind":"teleport","deck":"upper","dist":4.1},{"source":3760,"target":40,"kind":"teleport","deck":"upper","dist":4.1},{"source":3765,"target":19,"kind":"teleport","deck":"upper","dist":3.6},{"source":3830,"target":58,"kind":"teleport","deck":"upper","dist":3.6},{"source":3835,"target":30,"kind":"teleport","deck":"upper","dist":4.1},{"source":3903,"target":58,"kind":"teleport","deck":"upper","dist":4.1},{"source":3909,"target":30,"kind":"teleport","deck":"upper","dist":3.6},{"source":4365,"target":19,"kind":"teleport","deck":"upper","dist":1},{"source":4371,"target":58,"kind":"teleport","deck":"upper","dist":4.1},{"source":4377,"target":40,"kind":"teleport","deck":"upper","dist":2.2},{"source":4383,"target":30,"kind":"teleport","deck":"upper","dist":3.6}],"forcedEdges":[{"source":0,"target":1,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":1,"target":104,"kind":"elevator","forced":true,"drop":2.5,"dist":4.1},{"source":2,"target":3,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":3,"target":104,"kind":"elevator","forced":true,"drop":2.5,"dist":2.2},{"source":4,"target":104,"kind":"elevator","forced":true,"drop":2.5,"dist":3.6},{"source":5,"target":4,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":6,"target":7,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":7,"target":104,"kind":"elevator","forced":true,"drop":2.5,"dist":1},{"source":8,"target":9,"kind":"elevator","forced":true,"drop":4,"dist":1},{"source":9,"target":47,"kind":"elevator","forced":true,"drop":4,"dist":4.1},{"source":10,"target":63,"kind":"elevator","forced":true,"drop":4,"dist":4.1},{"source":11,"target":10,"kind":"elevator","forced":true,"drop":4,"dist":1},{"source":12,"target":13,"kind":"elevator","forced":true,"drop":4,"dist":1},{"source":13,"target":36,"kind":"elevator","forced":true,"drop":4,"dist":4.1},{"source":14,"target":15,"kind":"elevator","forced":true,"drop":4,"dist":1},{"source":15,"target":22,"kind":"elevator","forced":true,"drop":4,"dist":4.1},{"source":16,"target":14,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":17,"target":16,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":18,"target":17,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":19,"target":20,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":20,"target":21,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":21,"target":25,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":22,"target":23,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":23,"target":50,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":24,"target":22,"kind":"fall","forced":true,"drop":4,"dist":5.1},{"source":25,"target":24,"kind":"fall","forced":true,"drop":4,"dist":1.4},{"source":30,"target":31,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":31,"target":32,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":32,"target":39,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":33,"target":12,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":34,"target":33,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":35,"target":34,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":36,"target":37,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":37,"target":49,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":38,"target":36,"kind":"fall","forced":true,"drop":4,"dist":5.1},{"source":39,"target":38,"kind":"fall","forced":true,"drop":4,"dist":1.4},{"source":40,"target":41,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":41,"target":42,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":42,"target":60,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":43,"target":8,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":44,"target":43,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":45,"target":44,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":46,"target":48,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":47,"target":46,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":48,"target":5,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":49,"target":2,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":50,"target":0,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":51,"target":52,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":52,"target":53,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":53,"target":11,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":54,"target":63,"kind":"fall","forced":true,"drop":4,"dist":5.1},{"source":55,"target":54,"kind":"fall","forced":true,"drop":4,"dist":1.4},{"source":56,"target":55,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":57,"target":56,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":58,"target":57,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":59,"target":47,"kind":"fall","forced":true,"drop":4,"dist":5.1},{"source":60,"target":59,"kind":"fall","forced":true,"drop":4,"dist":1.4},{"source":61,"target":6,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":62,"target":61,"kind":"fall","forced":true,"drop":4.5,"dist":3.6},{"source":63,"target":62,"kind":"fall","forced":true,"drop":4.5,"dist":4.1},{"source":104,"target":-1,"kind":"fall","forced":true,"drop":3,"dist":0}],"entries":[{"source":1552,"target":45,"kind":"teleport","deck":"lower","dist":3.6},{"source":1558,"target":18,"kind":"teleport","deck":"lower","dist":4.1},{"source":1635,"target":51,"kind":"teleport","deck":"lower","dist":1},{"source":1641,"target":35,"kind":"teleport","deck":"lower","dist":2.2},{"source":2579,"target":45,"kind":"teleport","deck":"lower","dist":3.6},{"source":2585,"target":18,"kind":"teleport","deck":"lower","dist":4.1},{"source":2657,"target":45,"kind":"teleport","deck":"lower","dist":4.1},{"source":2662,"target":18,"kind":"teleport","deck":"lower","dist":3.6},{"source":2727,"target":51,"kind":"teleport","deck":"lower","dist":3.6},{"source":2732,"target":35,"kind":"teleport","deck":"lower","dist":4.1},{"source":2800,"target":51,"kind":"teleport","deck":"lower","dist":4.1},{"source":2806,"target":35,"kind":"teleport","deck":"lower","dist":3.6},{"source":3682,"target":40,"kind":"teleport","deck":"upper","dist":3.6},{"source":3688,"target":19,"kind":"teleport","deck":"upper","dist":4.1},{"source":3760,"target":40,"kind":"teleport","deck":"upper","dist":4.1},{"source":3765,"target":19,"kind":"teleport","deck":"upper","dist":3.6},{"source":3830,"target":58,"kind":"teleport","deck":"upper","dist":3.6},{"source":3835,"target":30,"kind":"teleport","deck":"upper","dist":4.1},{"source":3903,"target":58,"kind":"teleport","deck":"upper","dist":4.1},{"source":3909,"target":30,"kind":"teleport","deck":"upper","dist":3.6},{"source":4365,"target":19,"kind":"teleport","deck":"upper","dist":1},{"source":4371,"target":58,"kind":"teleport","deck":"upper","dist":4.1},{"source":4377,"target":40,"kind":"teleport","deck":"upper","dist":2.2},{"source":4383,"target":30,"kind":"teleport","deck":"upper","dist":3.6}],"doors":[{"id":1552,"deck":"lower"},{"id":1558,"deck":"lower"},{"id":1635,"deck":"lower"},{"id":1641,"deck":"lower"},{"id":2579,"deck":"lower"},{"id":2585,"deck":"lower"},{"id":2657,"deck":"lower"},{"id":2662,"deck":"lower"},{"id":2727,"deck":"lower"},{"id":2732,"deck":"lower"},{"id":2800,"deck":"lower"},{"id":2806,"deck":"lower"},{"id":3682,"deck":"upper"},{"id":3688,"deck":"upper"},{"id":3760,"deck":"upper"},{"id":3765,"deck":"upper"},{"id":3830,"deck":"upper"},{"id":3835,"deck":"upper"},{"id":3903,"deck":"upper"},{"id":3909,"deck":"upper"},{"id":4365,"deck":"upper"},{"id":4371,"deck":"upper"},{"id":4377,"deck":"upper"},{"id":4383,"deck":"upper"}]};
+
+const svg = document.getElementById('svg');
+const view = document.getElementById('view');
+const gEdges = document.getElementById('edges');
+const gPath = document.getElementById('path');
+const gNodes = document.getElementById('nodes');
+let N = [], E = [], showStrand = true, hideOffPath = false, sel = null, mode = 'layered';
+let tx = 0, ty = 0, scale = 1;
+
+/* ---- loaded path (a route) ----------------------------------------------
+   Kept independent of the graph so one route can be projected onto the full
+   map and onto any partial graph in turn. PATH is the full ordered list of
+   checkpoint ids exactly as the route drives them; everything else is derived
+   against whatever graph is currently loaded. */
+let PATH = [], pathName = '';
+let onPath = new Set();       // path ids that exist in the current graph
+let pathOrder = new Map();    // id -> 1-based position in the FULL route
+let pathPairs = [];           // {a,b,gap} between consecutive PRESENT path ids
+
+function recomputePath(){
+  onPath = new Set();
+  pathOrder = new Map();
+  pathPairs = [];
+  const gid = new Set(N.map(n => n.id));
+  // position of each id in the full route (first occurrence wins)
+  PATH.forEach((id, i) => { if(!pathOrder.has(id)) pathOrder.set(id, i + 1); });
+  // the route's ids that this graph actually contains, in route order, keeping
+  // each id's index in the FULL path so we can tell adjacent from jumped
+  const present = [];
+  PATH.forEach((id, i) => { if(gid.has(id)){ onPath.add(id); present.push({id, i}); } });
+  for(let k = 0; k + 1 < present.length; k++){
+    pathPairs.push({
+      a: present[k].id, b: present[k + 1].id,
+      gap: present[k + 1].i - present[k].i > 1,   // route skipped off-graph nodes
+    });
+  }
+  const total = PATH.length, pres = present.length, gaps = pathPairs.filter(p => p.gap).length;
+  const set = (id, v) => { document.getElementById(id).textContent = v; };
+  set('p-name', pathName || '— none —');
+  set('p-total', total || '—');
+  set('p-present', total ? pres : '—');
+  set('p-cov', total ? (100 * pres / total).toFixed(0) + '%  (' + pres + '/' + total + ')' : '—');
+  set('p-gaps', total ? gaps : '—');
+}
+
+function applyView(){ view.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`); }
+
+/* ---- layered layout: one column per hop from SPAWN ----------------------
+   This is the default because the question the graph answers is "what can I
+   reach, in how many teleports" — a column per depth shows that directly,
+   which a force layout scrambles. Within a column, nodes are grouped by the
+   room you stand in, so a room's checkpoints stay adjacent. */
+function layoutLayered(nodes){
+  const cols = new Map();
+  for(const n of nodes){
+    const d = (n.kind === 'spawn') ? -1 : (typeof n.depth === 'number' ? n.depth : 0);
+    if(!cols.has(d)) cols.set(d, []);
+    cols.get(d).push(n);
+  }
+  const depths = [...cols.keys()].sort(function(a,b){ return a-b; });
+  const COLW = 300, ROWH = 44;
+  const tallest = Math.max.apply(null, depths.map(function(d){ return cols.get(d).length; }));
+  depths.forEach(function(d, ci){
+    const col = cols.get(d);
+    // keep each room's checkpoints together, movers before terminals
+    col.sort(function(a,b){
+      if(a.room !== b.room) return a.room < b.room ? -1 : 1;
+      if(a.terminal !== b.terminal) return a.terminal ? 1 : -1;
+      return a.id > b.id ? 1 : -1;
+    });
+    const h = col.length * ROWH;
+    col.forEach(function(n, i){
+      n.x = 200 + ci*COLW;
+      n.y = (tallest*ROWH)/2 - h/2 + i*ROWH + ROWH/2;
+      n.pinned = false;
+    });
+  });
+}
+
+/* ---- layout: spring-electrical with gravity ----------------------------
+   Node boxes are 112x34 px, so the equilibrium edge length must clear that or
+   labels collide. Gravity keeps edge-less terminal nodes from drifting away. */
+function layout(nodes, edges, iters = 600){
+  const idx = new Map(nodes.map((n,i)=>[n.id,i]));
+  nodes.forEach((n,i)=>{
+    const dep = typeof n.depth === 'number' ? n.depth : 1;
+    const a = (i / nodes.length) * Math.PI * 2;
+    n.x = 500 + dep*260 + Math.cos(a)*120;
+    n.y = 400 + Math.sin(a)*260;
+    n.vx = 0; n.vy = 0;
+  });
+  const adj = edges.map(e=>[idx.get(e.source), idx.get(e.target)])
+                   .filter(p=>p[0]!=null && p[1]!=null);
+  const K = 165;            // target separation, > node box diagonal
+  const GRAV = 0.010;       // pull to centroid; holds isolated nodes in frame
+  for(let it=0; it<iters; it++){
+    const t = K * Math.pow(1 - it/iters, 1.5) * 0.30 + 0.6;
+    let cx = 0, cy = 0;
+    for(const n of nodes){ cx += n.x; cy += n.y; }
+    cx /= nodes.length; cy /= nodes.length;
+    for(let i=0;i<nodes.length;i++){
+      const a = nodes[i];
+      for(let j=i+1;j<nodes.length;j++){
+        const b = nodes[j];
+        let dx = a.x-b.x, dy = a.y-b.y;
+        let d2 = dx*dx + dy*dy;
+        if(d2 < 4){ dx = (i-j)||1; dy = ((i*7)%5)-2 || 1; d2 = dx*dx+dy*dy; }
+        const d = Math.sqrt(d2);
+        // extra shove while boxes still overlap horizontally
+        const f = (K*K)/d2 * (d < K ? 2.4 : 1);
+        const ux = dx/d, uy = dy/d;
+        a.vx += ux*f; a.vy += uy*f; b.vx -= ux*f; b.vy -= uy*f;
+      }
+    }
+    for(const [ai,bi] of adj){
+      const a = nodes[ai], b = nodes[bi];
+      const dx = b.x-a.x, dy = b.y-a.y;
+      const d = Math.max(Math.hypot(dx,dy), .01);
+      const f = (d*d)/K * 0.035;
+      const ux = dx/d, uy = dy/d;
+      a.vx += ux*f; a.vy += uy*f; b.vx -= ux*f; b.vy -= uy*f;
+    }
+    for(const n of nodes){
+      n.vx += (cx-n.x)*GRAV; n.vy += (cy-n.y)*GRAV;
+      if(n.pinned){ n.vx = n.vy = 0; continue; }
+      const v = Math.hypot(n.vx, n.vy) || 1;
+      n.x += (n.vx/v) * Math.min(v, t);
+      n.y += (n.vy/v) * Math.min(v, t);
+      n.vx *= .75; n.vy *= .75;
+    }
+  }
+}
+
+function fit(){
+  const vis = N.filter(n=>!n.hidden);
+  if(!vis.length) return;
+  const xs = vis.map(n=>n.x), ys = vis.map(n=>n.y);
+  const minX = Math.min(...xs)-90, maxX = Math.max(...xs)+90;
+  const minY = Math.min(...ys)-60, maxY = Math.max(...ys)+60;
+  const r = svg.getBoundingClientRect();
+  scale = Math.min(r.width/(maxX-minX), r.height/(maxY-minY), 1.7);
+  tx = (r.width - (maxX-minX)*scale)/2 - minX*scale;
+  ty = (r.height - (maxY-minY)*scale)/2 - minY*scale;
+  applyView();
+}
+
+/* ---- render ------------------------------------------------------------- */
+const NS = 'http://www.w3.org/2000/svg';
+function el(t, attrs){ const e = document.createElementNS(NS,t); for(const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+
+function style(n){
+  if(n.kind === 'spawn') return {stroke:'var(--start)', fill:'var(--start-fill)'};
+  if(n.kind === 'goal')  return {stroke:'var(--goal)',  fill:'var(--goal-fill)'};
+  if(n.seed)     return {stroke:'var(--spawn)', fill:'var(--spawn-fill)'};
+  if(n.terminal) return {stroke:'var(--strand)', fill:'var(--strand-fill)'};
+  return {stroke:'var(--mover)', fill:'var(--mover-fill)'};
+}
+function labelOf(n){
+  if(n.kind === 'spawn') return ['SPAWN', n.room+'  (nothing claimed)'];
+  if(n.kind === 'goal')  return ['FINISH', n.room+'  (run ends)'];
+  return ['#'+n.id+' '+n.variant, 'g'+n.group+'  '+n.room];
+}
+/** every node sharing a group with n — claiming any one claims all of them.
+    SPAWN has no group, so it never matches anything. */
+function sameGroup(n){
+  if(n.group == null) return [n];
+  return N.filter(x => x.group != null && x.group === n.group);
+}
+
+function render(){
+  gEdges.textContent = ''; gPath.textContent = ''; gNodes.textContent = '';
+  const pos = new Map(N.map(n=>[n.id,n]));
+  // when something is selected, its group-mates and its edges stay lit
+  const lit = sel ? new Set(sameGroup(sel).map(x=>x.id)) : null;
+  // a loaded path dims everything off it (unless a selection is doing its own
+  // dimming), so the route reads clearly against the rest of the graph
+  const pathMode = !lit && PATH.length > 0;
+  for(const e of E){
+    const a = pos.get(e.source), b = pos.get(e.target);
+    if(!a||!b||a.hidden||b.hidden) continue;
+    const touches = lit && (lit.has(e.source) || lit.has(e.target));
+    const mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - Math.hypot(b.x-a.x,b.y-a.y)*0.11;
+    // A 'fall' edge is the drop through one pit column: you claim every box you
+    // pass and cannot stop. A 'teleport' edge is the double-respawn out of the
+    // gate at the column's bottom. They are completely different moves, so they
+    // must not look alike.
+    const fall = e.kind === 'fall', lift = e.kind === 'elevator';
+    const p = el('path', {
+      d:`M${a.x},${a.y} Q${mx},${my} ${b.x},${b.y}`, fill:'none',
+      stroke: touches ? 'var(--group)' : fall ? 'var(--fall)' : lift ? 'var(--lift)' : 'var(--faint)',
+      'stroke-width': touches ? 1.9 : fall ? 2.2 : lift ? 1.6 : 1,
+      'stroke-dasharray': fall ? 'none' : lift ? '1 4' : '4 3',
+      'stroke-linecap': lift ? 'round' : 'butt',
+      opacity: lit ? (touches ? .95 : .12)
+             : pathMode ? .07
+             : (fall ? .95 : lift ? .8 : .45),
+      'marker-end': touches ? 'url(#arrow-lit)' : fall ? 'url(#arrow-fall)' : lift ? 'url(#arrow-lift)' : 'url(#arrow)',
+    });
+    gEdges.appendChild(p);
+  }
+  // the path overlay: one bold link per consecutive pair of present ids. A gap
+  // link (the route left this graph in between) is drawn dashed and dimmer.
+  for(const {a:ai, b:bi, gap} of pathPairs){
+    const a = pos.get(ai), b = pos.get(bi);
+    if(!a||!b||a.hidden||b.hidden) continue;
+    const mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - Math.hypot(b.x-a.x,b.y-a.y)*0.11;
+    gPath.appendChild(el('path', {
+      d:`M${a.x},${a.y} Q${mx},${my} ${b.x},${b.y}`, fill:'none',
+      stroke: gap ? 'var(--path-dim)' : 'var(--path)',
+      'stroke-width': gap ? 2 : 3.2,
+      'stroke-dasharray': gap ? '6 5' : 'none',
+      'stroke-linecap':'round',
+      opacity: gap ? .6 : .95,
+      'marker-end': gap ? 'url(#arrow-path-gap)' : 'url(#arrow-path)',
+    }));
+  }
+  for(const n of N){
+    if(n.hidden) continue;
+    const s = style(n), [l1,l2] = labelOf(n);
+    const isMate = lit && lit.has(n.id) && n !== sel;
+    const hit = onPath.has(n.id);
+    const w = 112, h = 34;
+    const g = el('g', {class:'node', transform:`translate(${n.x},${n.y})`,
+      opacity: lit && !lit.has(n.id) ? .16
+             : pathMode && !hit ? .16
+             : 1});
+    // a checkpoint on the loaded path gets an outer green ring
+    if(hit)
+      g.appendChild(el('rect',{x:-w/2-3.5, y:-h/2-3.5, width:w+7, height:h+7, rx:8.5,
+        fill:'none', stroke:'var(--path)', 'stroke-width':2.4}));
+    g.appendChild(el('rect',{x:-w/2, y:-h/2, width:w, height:h, rx:6,
+      fill: hit ? 'var(--path-fill)' : s.fill,
+      stroke: (n===sel||isMate) ? 'var(--group)' : s.stroke,
+      'stroke-width': n===sel ? 2.6 : isMate ? 2.2 : 1.4,
+      'stroke-dasharray': isMate ? '4 2.5' : 'none'}));
+    if(hit){ // its 1-based position along the route
+      const ord = pathOrder.get(n.id);
+      const first = ord === 1, last = ord === PATH.length;
+      const badge = el('text',{x:-w/2+2, y:-h/2-6, 'text-anchor':'start',
+        fill: first ? 'var(--path-a)' : last ? 'var(--path-b)' : 'var(--path)',
+        'font-size':9, 'font-weight':700});
+      badge.textContent = (first ? '▶ ' : last ? '■ ' : '') + ord;
+      g.appendChild(badge);
+    }
+    if(n.terminal) // a bar on terminal nodes: no way out of this checkpoint
+      g.appendChild(el('rect',{x:-w/2, y:h/2-3, width:w, height:3, rx:1.5, fill:'var(--strand)'}));
+    const t1 = el('text',{y:-2,'text-anchor':'middle',fill:'var(--ink)','font-weight':'600'});
+    t1.textContent = l1; g.appendChild(t1);
+    const t2 = el('text',{y:11,'text-anchor':'middle',fill:'var(--dim)','font-size':'8.5'});
+    t2.textContent = l2; g.appendChild(t2);
+    g.dataset.id = n.id;
+    g.addEventListener('pointerdown', ev => startDrag(ev, n, g));
+    // select on the browser's own click event; inferring a click from
+    // pointerdown/up is unreliable once dragging is in play
+    g.addEventListener('click', ev => { ev.stopPropagation(); if(!suppressClick) select(n); });
+    gNodes.appendChild(g);
+  }
+}
+
+/* ---- interaction -------------------------------------------------------- */
+let drag = null;
+function toWorld(ev){ const r = svg.getBoundingClientRect();
+  return {x:(ev.clientX-r.left-tx)/scale, y:(ev.clientY-r.top-ty)/scale}; }
+
+const DRAG_SLOP = 4; // px of movement before a press counts as a drag, not a click
+let suppressClick = false;
+function startDrag(ev, n, g){
+  ev.stopPropagation();
+  const p = toWorld(ev);
+  suppressClick = false;
+  drag = {n, dx:n.x-p.x, dy:n.y-p.y, moved:false, sx:ev.clientX, sy:ev.clientY};
+}
+// on window, not svg: pointer capture and fast pointer-ups outside the element
+// both make an svg-scoped listener unreliable
+window.addEventListener('pointermove', ev => {
+  if(drag){
+    if(Math.hypot(ev.clientX-drag.sx, ev.clientY-drag.sy) > DRAG_SLOP) drag.moved = true;
+    if(drag.moved){
+      const p = toWorld(ev);
+      drag.n.x = p.x+drag.dx; drag.n.y = p.y+drag.dy; drag.n.pinned = true; render();
+    }
+    return;
+  }
+  if(pan){ tx = ev.clientX-pan.x; ty = ev.clientY-pan.y; applyView(); }
+});
+window.addEventListener('pointerup', () => {
+  suppressClick = !!(drag && drag.moved);   // a real drag must not also select
+  drag = null; pan = null; svg.classList.remove('panning');
+});
+let pan = null;
+svg.addEventListener('pointerdown', ev => {
+  if(drag) return;
+  pan = {x:ev.clientX-tx, y:ev.clientY-ty}; svg.classList.add('panning');
+});
+svg.addEventListener('click', () => { if(!suppressClick && sel){ sel = null; render();
+  document.getElementById('detail').textContent = 'Click a checkpoint.'; } });
+svg.addEventListener('wheel', ev => {
+  ev.preventDefault();
+  const r = svg.getBoundingClientRect(), mx = ev.clientX-r.left, my = ev.clientY-r.top;
+  const f = ev.deltaY < 0 ? 1.12 : 1/1.12, ns = Math.min(Math.max(scale*f, .15), 4);
+  tx = mx - (mx-tx)*(ns/scale); ty = my - (my-ty)*(ns/scale); scale = ns; applyView();
+}, {passive:false});
+
+function select(n){
+  sel = n;
+  const d = document.getElementById('detail');
+  if(n.kind === 'spawn'){
+    d.innerHTML =
+      '<div class="row"><span class="k">node</span><span>SPAWN</span></div>' +
+      '<div class="row"><span class="k">room</span><span>'+n.room+'</span></div>' +
+      '<div class="row"><span class="k">spawn point</span><span>'+n.pos.join(', ')+'</span></div>' +
+      '<div class="row"><span class="k">claims</span><span>none</span></div>' +
+      '<div class="row"><span class="k">successors</span><span>'+E.filter(function(e){return e.source==='SPAWN';}).length+'</span></div>' +
+      '<pre>the run starts here with an empty claimed-group set.\nnothing points back in — the start platform\ncannot be re-entered.</pre>';
+    render();
+    return;
+  }
+  const mates = sameGroup(n);
+  const outs = E.filter(function(e){ return e.source === n.id; }).length;
+  const rows = [
+    ['checkpoint', '#'+n.id],
+    ['variant', n.variant],
+    ['group', n.group],
+    ['group size (map)', n.groupSize],
+    ['room', n.room],
+    ['respawns to', n.mover ? n.spawnRoom : n.room+' (same — strands)'],
+    ['successors', n.mover ? outs : '0 — terminal'],
+    ['hops from spawn', n.depth],
+    ['box pos', n.pos.join(', ')],
+    ['spawn pos', n.spawn.join(', ')],
+  ];
+  const rowHtml = rows.map(function(r){
+    return '<div class="row"><span class="k">'+r[0]+'</span><span>'+r[1]+'</span></div>';
+  }).join('');
+  let extra;
+  if(mates.length > 1){
+    extra = '<pre><b style="color:var(--group)">'+mates.length+
+      ' checkpoints in view share group '+n.group+'</b>\nclaiming any one claims them all:\n'+
+      mates.map(function(m){
+        return '  #'+String(m.id).padEnd(5)+' '+m.variant.padEnd(7)+' '+m.room+
+               (m.id===n.id ? '   <- selected' : '');
+      }).join('\n')+'</pre>';
+  } else {
+    extra = '<pre>only checkpoint of group '+n.group+' in view\n('+
+            n.groupSize+' exist across the whole map)</pre>';
+  }
+  d.innerHTML = rowHtml + extra;
+  render();
+}
+
+/* ---- load --------------------------------------------------------------- */
+function load(payload){
+  if(!payload || !Array.isArray(payload.nodes) || !Array.isArray(payload.edges))
+    throw new Error('Expected a {nodes, edges} graph file from the graph emitter');
+  N = payload.nodes.map(n=>({...n}));
+  E = payload.edges.map(e=>({...e}));
+  sel = null;
+  document.getElementById('model').textContent = payload.meta?.model ?? '';
+  document.getElementById('axis').textContent =
+    'layered: column = teleports from SPAWN';
+  document.getElementById('banner').textContent =
+    (payload.meta?.rootRoom ? 'root room '+payload.meta.rootRoom+' · depth '+payload.meta.depth : '');
+  const gc = new Map();
+  for(const n of N) gc.set(n.group, (gc.get(n.group)||0)+1);
+  document.getElementById('s-nodes').textContent = N.length;
+  document.getElementById('s-groups').textContent = gc.size;
+  document.getElementById('s-dup').textContent = [...gc.values()].filter(v=>v>1).length;
+  document.getElementById('s-strand').textContent = N.filter(n=>n.terminal).length;
+  document.getElementById('s-edges').textContent = E.length;
+  document.getElementById('detail').textContent = 'Click a checkpoint.';
+  recomputePath();   // re-project any already-loaded path onto the new graph
+  applyHidden(); relayout(); render(); fit();
+}
+function applyHidden(){
+  const hp = hideOffPath && PATH.length > 0;
+  for(const n of N)
+    n.hidden = (!showStrand && n.terminal) || (hp && !onPath.has(n.id));
+}
+
+function relayout(){
+  N.forEach(function(n){ n.pinned = false; });
+  if(mode === 'layered') layoutLayered(N.filter(function(n){ return !n.hidden; }));
+  else layout(N, E);
+}
+document.getElementById('relayout').onclick = function(){ relayout(); render(); fit(); };
+document.getElementById('toggle-mode').onclick = function(ev){
+  mode = (mode === 'layered') ? 'force' : 'layered';
+  ev.target.textContent = (mode === 'layered') ? 'Layout: layered' : 'Layout: force';
+  relayout(); render(); fit();
+};
+document.getElementById('fit').onclick = fit;
+document.getElementById('toggle-strand').onclick = ev => {
+  showStrand = !showStrand;
+  ev.target.textContent = showStrand ? 'Hide terminal' : 'Show terminal';
+  applyHidden(); relayout(); render(); fit();
+};
+document.getElementById('file').onchange = ev => {
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => { try{ load(JSON.parse(r.result)); }catch(err){ alert('Could not load: '+err.message); } };
+  r.readAsText(f);
+};
+
+/* ---- path (route) loading ----------------------------------------------- */
+// mirrors verify/validate.ts: accept {route:[{cp}]}, {steps:[{exit:{cp}}]},
+// or a bare array of ids / {cp|id} objects.
+function extractPathIds(o){
+  const pick = s => (s && typeof s === 'object') ? (s.cp ?? s.id ?? s.node) : s;
+  if(Array.isArray(o?.route)) return o.route.map(pick);
+  if(Array.isArray(o?.steps)) return o.steps.map(s => s?.exit?.cp ?? pick(s));
+  if(Array.isArray(o))        return o.map(pick);
+  throw new Error('expected .route[], .steps[], or a bare array of checkpoint ids');
+}
+function loadPath(obj, name){
+  const ids = extractPathIds(obj).filter(v => v !== undefined && v !== null);
+  if(!ids.length) throw new Error('no checkpoints found in file');
+  PATH = ids; pathName = name;
+  sel = null; document.getElementById('detail').textContent = 'Click a checkpoint.';
+  recomputePath();
+  if(hideOffPath){ applyHidden(); relayout(); render(); fit(); } else render();
+  if(!onPath.size) alert('Path loaded, but none of its '+ids.length+
+    ' checkpoints exist in the current graph. Load the full map graph to see it.');
+}
+function fitPath(){
+  const vis = N.filter(n => !n.hidden && onPath.has(n.id));
+  if(!vis.length){ fit(); return; }
+  const xs = vis.map(n=>n.x), ys = vis.map(n=>n.y);
+  const minX = Math.min(...xs)-90, maxX = Math.max(...xs)+90;
+  const minY = Math.min(...ys)-60, maxY = Math.max(...ys)+60;
+  const r = svg.getBoundingClientRect();
+  scale = Math.min(r.width/(maxX-minX), r.height/(maxY-minY), 1.7);
+  tx = (r.width - (maxX-minX)*scale)/2 - minX*scale;
+  ty = (r.height - (maxY-minY)*scale)/2 - minY*scale;
+  applyView();
+}
+document.getElementById('pfile').onchange = ev => {
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => { try{ loadPath(JSON.parse(r.result), f.name); }
+    catch(err){ alert('Could not load path: '+err.message); } };
+  r.readAsText(f);
+  ev.target.value = '';   // allow reloading the same file after editing it
+};
+document.getElementById('pclear').onclick = () => {
+  PATH = []; pathName = ''; recomputePath();
+  // clearing the path un-hides whatever the off-path filter was hiding
+  applyHidden(); relayout(); render(); fit();
+};
+document.getElementById('pfit').onclick = fitPath;
+document.getElementById('phide').onclick = ev => {
+  hideOffPath = !hideOffPath;
+  ev.target.textContent = hideOffPath ? 'Show off-path' : 'Hide off-path';
+  ev.target.setAttribute('aria-pressed', hideOffPath);
+  applyHidden(); relayout(); render(); fit();
+};
+
+load(EMBEDDED);
+// the first fit can run before the SVG has its final box; re-fit next frame
+requestAnimationFrame(fit);
+window.addEventListener('resize', fit);
+</script>
+</body>
+</html>
