@@ -38,5 +38,18 @@ while IFS=: read -r name want_score want_exit; do
   fi
 done <<< "$CASES"
 
+# Every `fact N` cited by a door must exist as a row in FACTS.md.
+if [ -f FACTS.md ]; then
+  ids=$(grep -oE '^\| *[0-9]+ *\|' FACTS.md | grep -oE '[0-9]+' | sort -n | uniq)
+  missing=""
+  for n in $(grep -rhoE 'fact [0-9]+' README.md THE-*.md routes/README.md 2>/dev/null | grep -oE '[0-9]+' | sort -n | uniq); do
+    echo "$ids" | grep -qx "$n" || missing="$missing $n"
+  done
+  if [ -n "$missing" ]; then echo "  FAIL cited but absent from FACTS.md:$missing"; fail=1
+  else echo "  ok   every cited fact resolves"; fi
+else
+  echo "  FAIL FACTS.md is missing"; fail=1
+fi
+
 if [ "$fail" = 0 ]; then echo "all 6 routes reproduce their measured score"; else echo "CHECK FAILED"; fi
 exit "$fail"
