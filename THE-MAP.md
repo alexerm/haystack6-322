@@ -20,9 +20,10 @@ a track-building puzzle. Parsing the file shows where the map actually lives:
 | **checkpoint boxes** | **6,396** | the puzzle |
 
 Every one of those 6,396 boxes is a checkpoint you can drive into. The author
-time is 15:11.615. Nobody has ever finished it — no record on Nadeo's
-leaderboard, no replay, no award, no comment on TMX (fact 132). There is a
-standing $200 bounty for beating the author time, sponsored by Wizord.tv.
+time is 15:11.615. Nobody has ever finished it: no record on Nadeo's
+leaderboard, and on TMX no replay, no award and no world record (fact 132,
+re-checked 2026-08-31). There is a standing $200 bounty for beating the author
+time, sponsored by Wizord.tv.
 
 One person has completed it: FruitSesh, validating the build before release.
 The 323 waypoint timestamps from that run are embedded in the released map, and
