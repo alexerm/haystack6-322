@@ -25,7 +25,7 @@ below returns 1. None is a winner.
 | [`best-321-third.json`](best-321-third.json) | 322 | **321 / 322** | `1055171169` |
 | [`best-320-contested.json`](best-320-contested.json) | 321 | 320 / 322 | `1875528577`, `1055171169` |
 | [`best-319-partial.json`](best-319-partial.json) | 320 | 319 / 322 | `1055171172`, `1399226756`, `1867416289` |
-| [`best-315-partial.json`](best-315-partial.json) | 316 | 315 / 322 | seven abundant groups |
+| [`best-315-partial.json`](best-315-partial.json) | 316 | 315 / 322 | seven abundant groups: `1038983089`, `1404196129`, `1664870129`, `1949788289`, `1975919425`, `2035648737`, `2133528401` |
 
 **The three 321s omit three different groups, and that is the point.** Each
 claims the two the other two cannot, so every pair of those groups is jointly

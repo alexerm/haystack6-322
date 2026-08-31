@@ -27,7 +27,9 @@ This document is self-contained. You do not need to read
    {"source": 1081, "target": 1087, "kind": "teleport", "forced": false, "region": "rooms"}]}
 ```
 
-The fields that matter are `id`, `group` and the `source`/`target` pair.
+A node is one checkpoint box in the map, and this document says **box** and
+**node** interchangeably. The fields that matter are `id`, `group` and the
+`source`/`target` pair.
 `variant`, `room`, `region`, `pos` and `depth` are there to help you reason and
 carry no rule. Edge `kind` is `teleport` (33,814), `elevator` (120) or `fall`
 (73); all three behave identically.
