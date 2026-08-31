@@ -36,6 +36,9 @@ everything learned while failing to improve it.
 | solve it as a routing instance | **[THE-PROBLEM.md](THE-PROBLEM.md)** |
 | know what was already tried, and what died | **[THE-CAMPAIGN.md](THE-CAMPAIGN.md)** |
 
+Four interactive viewers are at **https://alexerm.github.io/haystack6-322/**,
+including the 321 as a drivable route sheet.
+
 [FACTS.md](FACTS.md) is the register those three cite. Each numbered row is a
 finding that was measured or observed rather than argued; the documents cite a
 row instead of restating it.
