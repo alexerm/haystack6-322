@@ -1,6 +1,6 @@
-This licence covers data/, routes/, and the Markdown documents in this repo
+This licence covers data/, routes/, archive/, and the Markdown documents in this repo
 (README.md, THE-MAP.md, THE-PROBLEM.md, THE-CAMPAIGN.md, FACTS.md and the
-sub-READMEs). The referee in verify/ is licensed separately under MIT; see
+sub-READMEs). The code in verify/ and solve/ is licensed separately under MIT; see
 LICENSE.
 
 Creative Commons Attribution 4.0 International (CC BY 4.0)

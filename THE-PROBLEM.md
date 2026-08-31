@@ -244,6 +244,14 @@ Exit **0** complete · **1** legal but partial · **2** illegal.
 referee shares no code with any solver, deliberately, so a solver's own
 bookkeeping bug cannot hide behind agreeing with itself.
 
+## 8. Starting from where this left off
+
+[`solve/`](solve) holds the CP-SAT model of record, which reproduces the 321
+from a warm start, and `mine_routes.py`, which ranks routes by edges no known
+route uses. [`archive/`](archive) is the 132-route pool that novelty is measured
+against; all 132 are refereed. Read [solve/README.md](solve/README.md) before
+running anything, and §6 above before choosing what to run.
+
 ---
 
 [THE-CAMPAIGN.md](THE-CAMPAIGN.md) is what was tried and what died.

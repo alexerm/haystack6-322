@@ -41,11 +41,17 @@ row instead of restating it.
 ## What is here
 
 ```
-data/graph.json     6,396 nodes · 34,007 edges · 323 group ids, 322 claimable
-data/facing.json    the authored spawn facing of every checkpoint
-routes/             six refereed routes, 315 to 321 groups — routes/README.md
-verify/             the referee, and how to submit a claim — verify/README.md
+data/graph.json            6,396 nodes · 34,007 edges · 323 group ids, 322 claimable
+data/facing.json           the authored spawn facing of every checkpoint
+data/spire.json            the endgame conveyor as its own graph
+data/author-waypoints.json the author's 323 split times, from the released map
+routes/                    six refereed routes, 315 to 321 groups
+archive/                   the 132-route known pool that "novel" is measured against
+solve/                     the CP-SAT model that reaches 321, and the novelty ranker
+verify/                    the referee, and how to submit a claim
 ```
+
+Each directory has its own README.
 
 ## Claiming a 322
 
@@ -59,6 +65,19 @@ Exit **0** complete · **1** legal but partial · **2** illegal. **A 322 claim i
 a route file plus exit code 0. Nothing else is a claim.**
 
 No dependencies, no build step. The referee needs only Bun or Node 22.6+.
+
+## Reproducing the 321
+
+```bash
+pip install ortools
+python3 solve/solve_cpsat_map.py --hint routes/best-321-partial.json --max \
+    --time 120 --workers 4 --all-different-circuit --probing-level 0 --out mine.json
+bun verify/validate.ts mine.json
+```
+
+Reaches FEASIBLE at 321/322 in 120 s on four workers. Those two solver flags are
+the difference between the configuration that found the 321 and OR-Tools'
+defaults, which did not. [solve/README.md](solve/README.md) has the rest.
 
 ## Credit and licence
 

@@ -1,4 +1,5 @@
-This licence covers the contents of verify/ — the route referee.
+This licence covers the code in verify/ (the route referee) and solve/
+(the CP-SAT model and the novelty ranker).
 The data, the routes and the Markdown documents are licensed separately;
 see LICENSE-DATA.
 

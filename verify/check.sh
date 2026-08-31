@@ -7,6 +7,9 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+ARCHIVE=0
+[ "${1:-}" = "--archive" ] && ARCHIVE=1
+
 RUNNER=${RUNNER:-}
 if [ -z "$RUNNER" ]; then
   if command -v bun >/dev/null 2>&1; then RUNNER="bun"
@@ -60,6 +63,21 @@ if [ -f FACTS.md ]; then
   rowcount=$(grep -cE '^\| [0-9]+ \|' FACTS.md)
   if [ "$malformed" -ne 0 ]; then echo "  FAIL $malformed malformed rows in FACTS.md"; fail=1
   else echo "  ok   all $rowcount FACTS.md rows well-formed"; fi
+fi
+
+# --archive: referee all 132 routes in the known pool. Slower, so opt-in.
+if [ "$ARCHIVE" = 1 ]; then
+  tmp=$(mktemp -d); n=0; bad=0
+  for f in archive/route-*.txt; do
+    want=$(basename "$f" | sed -E 's/route-([0-9]+)-.*/\1/')
+    python3 -c "import json,sys;ids=open(sys.argv[1]).read().split()[1:];json.dump({'route':[{'cp':int(i)} for i in ids]},open(sys.argv[2],'w'))" "$f" "$tmp/r.json"
+    out=$($RUNNER verify/validate.ts "$tmp/r.json" 2>&1); code=$?
+    got=$(printf '%s' "$out" | grep -oE '[0-9]+/322 groups claimed' | grep -oE '^[0-9]+')
+    n=$((n+1))
+    if [ "$code" = "2" ] || [ "$got" != "$want" ]; then bad=$((bad+1)); echo "  FAIL $(basename "$f") got ${got:-illegal} want $want"; fi
+  done
+  rm -rf "$tmp"
+  if [ "$bad" = 0 ]; then echo "  ok   all $n archive routes legal, scores match their filenames"; else fail=1; fi
 fi
 
 if [ "$fail" = 0 ]; then echo "all 6 routes reproduce their measured score"; else echo "CHECK FAILED"; fi
