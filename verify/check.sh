@@ -42,7 +42,7 @@ done <<< "$CASES"
 if [ -f FACTS.md ]; then
   ids=$(grep -oE '^\| *[0-9]+ *\|' FACTS.md | grep -oE '[0-9]+' | sort -n | uniq)
   missing=""
-  for n in $(grep -rhoE 'fact [0-9]+' README.md THE-*.md routes/README.md 2>/dev/null | grep -oE '[0-9]+' | sort -n | uniq); do
+  for n in $(grep -rhoE 'facts? [0-9]+' README.md THE-*.md routes/README.md 2>/dev/null | grep -oE '[0-9]+' | sort -n | uniq); do
     echo "$ids" | grep -qx "$n" || missing="$missing $n"
   done
   if [ -n "$missing" ]; then echo "  FAIL cited but absent from FACTS.md:$missing"; fail=1
