@@ -12,6 +12,9 @@ everything learned while failing to improve it.
 
 ![The endgame conveyor: 24 doors, 8 chains, one finish](viz/endgame-conveyor.png)
 
+*The endgame. [viz/](viz) has two more: the five kinds of room beside their
+graphs, and the contested corridor that is the wall.*
+
 ## The open question
 
 > **Claim all 322 link groups in one run, then cross the Finish.**
