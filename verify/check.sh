@@ -19,6 +19,8 @@ echo "runner: $RUNNER"
 
 # route file : expected groups claimed : expected exit code
 CASES="
+finish-322-ciryll:322:0
+finish-322-kattz95:322:0
 best-315-partial:315:1
 best-319-partial:319:1
 best-320-contested:320:1
@@ -89,5 +91,5 @@ if [ -f viz/check_figures.py ] && command -v python3 >/dev/null 2>&1; then
   fi
 fi
 
-if [ "$fail" = 0 ]; then echo "all 6 routes reproduce their measured score"; else echo "CHECK FAILED"; fi
+if [ "$fail" = 0 ]; then echo "all 8 routes reproduce their measured score"; else echo "CHECK FAILED"; fi
 exit "$fail"

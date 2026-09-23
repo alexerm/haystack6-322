@@ -2,34 +2,51 @@
 
 **[Haystack 6](https://trackmania.exchange/maps/323677)** by **FruitSesh** is a
 Trackmania 2020 map with 6,396 checkpoints collapsing into **322 link groups**.
-Its leaderboard has no finisher. One person has ever completed it — the author,
-validating the build before release — and the timestamps of that run are
-embedded in the released map, which is proof that a complete route exists on
-exactly this build.
+Its leaderboard stayed empty for three months after release. Then two players
+finished it within two days, and both drove **the same route**:
 
-This repo is the map as a graph, the best route anyone has produced, and
-everything learned while failing to improve it.
+| player | time | set | respawns |
+|---|---|---|---|
+| Kattz95 | **15:04.135** | 2026-09-08 | 317 |
+| Ciryll | 16:21.645 | 2026-09-06 | 326 |
+
+Kattz95's run is 7.5 s under the 15:11.615 author time. The author's own
+validation run is a third complete run, embedded in the released map as 323
+split times, and it takes a different route.
+
+This repo is the map as a graph, the finished route refereed against it, and a
+six-week solver campaign that reached 321 of 322 and no further.
 
 ![The endgame conveyor: 24 doors, 8 chains, one finish](viz/endgame-conveyor.png)
 
 *The endgame. [viz/](viz) has two more: the five kinds of room beside their
 graphs, and the contested corridor that is the wall.*
 
-## The open question
+## What the finish settled
 
 > **Claim all 322 link groups in one run, then cross the Finish.**
 
-- Best known: **321 of 322**, and three different routes achieve it, each
-  omitting a **different** group. So no single group is the obstruction.
-- The union of every route anyone has found is **INFEASIBLE**. A 322 needs an
-  edge nobody has used.
-- A walk claiming all 322 groups *does* exist — it is illegal by exactly one
-  duplicated group, and across 104 excision sites not one has the edge that
-  would make the deletion legal.
-- Whether a 322 exists **in this graph** is open. There is no proof in either
-  direction.
-- unbeaten.at carries a standing **$200 bounty**, sponsored by Wizord.tv, for
-  beating the 15:11.615 author time. It was still active on 2026-08-31.
+- **A 322 exists in this graph.** Both finished runs pass the referee with exit
+  0. The route was read out of the players' ghosts without consulting a single
+  edge, so the verdict also checks the graph: all 322 moves are edges it
+  already had.
+- **No solver found it.** The campaign's best is **321 of 322**, from three
+  routes that each omit a different group. The finished route differs from all
+  of them at the first step: it begins at `START#29`, and all 138 solver routes
+  here begin at `START#28`.
+- **The finished route lies almost entirely outside the solver pool.** 288 of
+  its 322 edges and 255 of its 323 boxes appear in none of the 138 solver
+  routes (fact 135). The campaign bet that a 322 needs edges nobody had used.
+  It needed hundreds.
+
+## What is still open
+
+- **Can a solver find a 322 unaided?** Every method in
+  [THE-CAMPAIGN.md](THE-CAMPAIGN.md) stopped at 321. The instance now has a
+  known solution to measure a solver against.
+- **Is there a faster route?** Both leaderboard runs drive one route, and the
+  author drove another. Only the author's split times survive, not the boxes
+  (fact 79).
 
 ## Three ways in
 
@@ -39,8 +56,8 @@ graphs, and the contested corridor that is the wall.*
 | solve it as a routing instance | **[THE-PROBLEM.md](THE-PROBLEM.md)** |
 | know what was already tried, and what died | **[THE-CAMPAIGN.md](THE-CAMPAIGN.md)** |
 
-Four interactive viewers are at **https://alexerm.github.io/haystack6-322/**,
-including the 321 as a drivable route sheet.
+Four interactive viewers are at **https://alexerm.github.io/haystack6-322/**.
+Two of them draw any route file, the finished route included.
 
 [FACTS.md](FACTS.md) is the register those three cite. Each numbered row is a
 finding that was measured or observed rather than argued; the documents cite a
@@ -53,7 +70,7 @@ data/graph.json            6,396 nodes · 34,007 edges · 323 group ids, 322 cla
 data/facing.json           the authored spawn facing of every checkpoint
 data/spire.json            the endgame conveyor as its own graph
 data/author-waypoints.json the author's 323 split times, from the released map
-routes/                    six refereed routes, 315 to 321 groups
+routes/                    the finished 322 from both ghosts, and six solver routes, 315 to 321
 viz/                       figures, and the script that proves they match the data
 archive/                   the 132-route known pool that "novel" is measured against
 solve/                     the CP-SAT model that reaches 321, and the novelty ranker
@@ -62,7 +79,7 @@ verify/                    the referee, and how to submit a claim
 
 Each directory has its own README.
 
-## Claiming a 322
+## Checking a route
 
 ```bash
 ./verify/check.sh                                    # re-validate everything here

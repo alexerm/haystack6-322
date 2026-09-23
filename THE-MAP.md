@@ -20,17 +20,23 @@ a track-building puzzle. Parsing the file shows where the map actually lives:
 | **checkpoint boxes** | **6,396** | the puzzle |
 
 Every one of those 6,396 boxes is a checkpoint you can drive into. The author
-time is 15:11.615. Nobody has ever finished it: no record on Nadeo's
-leaderboard, and on TMX no replay, no award and no world record (fact 132,
-re-checked 2026-08-31). There is a standing $200 bounty for beating the author
-time, sponsored by Wizord.tv.
+time is 15:11.615. Three complete runs are known:
 
-One person has completed it: FruitSesh, validating the build before release.
-The 323 waypoint timestamps from that run are embedded in the released map, and
-they prove a complete route exists on exactly this build (fact 132). The run
-is execution, not exploration — 323 moves in 911 seconds, speeding up 8% from
-start to finish. He knew the route before he drove it
-(fact 17).
+| run | time | route |
+|---|---|---|
+| Kattz95, 2026-09-08 | **15:04.135** | [`routes/finish-322-kattz95.json`](routes/finish-322-kattz95.json) |
+| FruitSesh, the author, before release | 15:11.615 | only the 323 split times survive (fact 79) |
+| Ciryll, 2026-09-06 | 16:21.645 | [`routes/finish-322-ciryll.json`](routes/finish-322-ciryll.json) |
+
+Ciryll was the first player to finish, three months after release. Kattz95
+drove the same route two days later and beat the author time, which was the
+condition of the $200 unbeaten.at bounty sponsored by Wizord.tv (fact 134). Both
+ghosts are on Nadeo's leaderboard, so you can watch the route driven.
+
+The author's run is a different route (fact 133). The 323 waypoint timestamps
+from it are embedded in the released map (fact 132). The run is execution, not
+exploration — 323 moves in 911 seconds, speeding up 8% from start to finish.
+The author knew the route before driving it (fact 17).
 
 ## 2. The mechanic — you do not drive from box to box, you are teleported
 
@@ -192,6 +198,6 @@ work out, you know where it ends.
 
 ---
 
-Next: [THE-PROBLEM.md](THE-PROBLEM.md) states the map as a graph, with the best
-route anyone has found. [FACTS.md](FACTS.md) is the evidence behind every
+Next: [THE-PROBLEM.md](THE-PROBLEM.md) states the map as a graph, with the
+finished route and the best the solvers reached. [FACTS.md](FACTS.md) is the evidence behind every
 numbered claim above.

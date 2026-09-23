@@ -1,0 +1,2603 @@
+{
+ "meta": {
+  "graph": "data/graph.json",
+  "status": "WINNER",
+  "won": true,
+  "groupsClaimed": 322,
+  "groupsTotal": 322,
+  "steps": 323,
+  "player": "Kattz95",
+  "timeMs": 904135,
+  "respawns": 317,
+  "set": "2026-09-08T00:54:28Z",
+  "ghost": "https://trackmania.io/api/download/ghost/e69975a9-0276-4059-8a23-1dc4b0e8dac0",
+  "extraction": "ghost Checkpoints[].Time -> interpolated telemetry position -> nearest checkpoint box; ties broken by claim-each-group-once. The graph's edges are never consulted.",
+  "fields": "t = ms into the run when the claim registered; d = metres from the car to the matched box"
+ },
+ "route": [
+  {
+   "cp": 29,
+   "t": 1744,
+   "group": 1492404801,
+   "variant": "START",
+   "region": "spire",
+   "d": 4.34
+  },
+  {
+   "cp": 101,
+   "t": 4559,
+   "group": 1885379892,
+   "variant": "CP",
+   "region": "hub",
+   "d": 1.51
+  },
+  {
+   "cp": 94,
+   "t": 4627,
+   "group": 1871390177,
+   "variant": "CP",
+   "region": "hub",
+   "d": 0.84
+  },
+  {
+   "cp": 85,
+   "t": 4679,
+   "group": 1298681601,
+   "variant": "F",
+   "region": "hub",
+   "d": 3.3
+  },
+  {
+   "cp": 571,
+   "t": 8073,
+   "group": 1888837569,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.7
+  },
+  {
+   "cp": 506,
+   "t": 11094,
+   "group": 1819491265,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 3.34
+  },
+  {
+   "cp": 508,
+   "t": 14897,
+   "group": 1737198833,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.91
+  },
+  {
+   "cp": 440,
+   "t": 17144,
+   "group": 1980384865,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 4.14
+  },
+  {
+   "cp": 374,
+   "t": 20617,
+   "group": 1747584577,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 4.59
+  },
+  {
+   "cp": 367,
+   "t": 24136,
+   "group": 1541637905,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.8
+  },
+  {
+   "cp": 301,
+   "t": 27249,
+   "group": 1279030593,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 3.75
+  },
+  {
+   "cp": 294,
+   "t": 30768,
+   "group": 1889930705,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.46
+  },
+  {
+   "cp": 230,
+   "t": 33977,
+   "group": 2123535873,
+   "variant": "CP",
+   "region": "floor 2",
+   "d": 3.95
+  },
+  {
+   "cp": 227,
+   "t": 34028,
+   "group": 2034130465,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 3.71
+  },
+  {
+   "cp": 224,
+   "t": 36636,
+   "group": 1914312369,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 2.22
+  },
+  {
+   "cp": 1172,
+   "t": 38809,
+   "group": 1244843905,
+   "variant": "FW",
+   "region": "floor 3",
+   "d": 4.59
+  },
+  {
+   "cp": 1253,
+   "t": 40956,
+   "group": 1085341569,
+   "variant": "FW",
+   "region": "floor 3",
+   "d": 2.7
+  },
+  {
+   "cp": 1173,
+   "t": 43993,
+   "group": 2007900929,
+   "variant": "FWSide",
+   "region": "floor 3",
+   "d": 3.48
+  },
+  {
+   "cp": 1179,
+   "t": 46278,
+   "group": 1672179249,
+   "variant": "FWSide",
+   "region": "floor 3",
+   "d": 1.67
+  },
+  {
+   "cp": 1186,
+   "t": 48888,
+   "group": 1910437393,
+   "variant": "Down",
+   "region": "floor 3",
+   "d": 2.26
+  },
+  {
+   "cp": 232,
+   "t": 50956,
+   "group": 1861213297,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.7
+  },
+  {
+   "cp": 300,
+   "t": 53225,
+   "group": 1265863953,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 3.95
+  },
+  {
+   "cp": 371,
+   "t": 56104,
+   "group": 2125456081,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 2.09
+  },
+  {
+   "cp": 1350,
+   "t": 59457,
+   "group": 1393869713,
+   "variant": "Down",
+   "region": "floor 3",
+   "d": 1.89
+  },
+  {
+   "cp": 370,
+   "t": 62474,
+   "group": 2105002817,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 2.84
+  },
+  {
+   "cp": 373,
+   "t": 66082,
+   "group": 1323878225,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 3.15
+  },
+  {
+   "cp": 443,
+   "t": 69295,
+   "group": 1469566881,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 4.11
+  },
+  {
+   "cp": 448,
+   "t": 71514,
+   "group": 1753690577,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 2.08
+  },
+  {
+   "cp": 450,
+   "t": 74852,
+   "group": 2040880913,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 4.05
+  },
+  {
+   "cp": 383,
+   "t": 76996,
+   "group": 1920318609,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.7
+  },
+  {
+   "cp": 451,
+   "t": 79235,
+   "group": 1519649409,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 3.95
+  },
+  {
+   "cp": 519,
+   "t": 81465,
+   "group": 1336942161,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 3.95
+  },
+  {
+   "cp": 590,
+   "t": 84740,
+   "group": 1493973073,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 2.95
+  },
+  {
+   "cp": 1629,
+   "t": 88136,
+   "group": 1872287105,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 3.73
+  },
+  {
+   "cp": 3237,
+   "t": 90699,
+   "group": 2111633252,
+   "variant": "_U",
+   "region": "floor 4",
+   "d": 1.16
+  },
+  {
+   "cp": 2724,
+   "t": 93772,
+   "group": 1874419825,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.83
+  },
+  {
+   "cp": 2654,
+   "t": 95994,
+   "group": 1519438049,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.14
+  },
+  {
+   "cp": 2572,
+   "t": 98204,
+   "group": 1543323537,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 3.37
+  },
+  {
+   "cp": 2493,
+   "t": 101243,
+   "group": 1753682369,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 3.7
+  },
+  {
+   "cp": 2497,
+   "t": 104867,
+   "group": 1338447137,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.31
+  },
+  {
+   "cp": 3240,
+   "t": 107139,
+   "group": 1843038516,
+   "variant": "_U",
+   "region": "floor 4",
+   "d": 1.16
+  },
+  {
+   "cp": 2582,
+   "t": 112794,
+   "group": 1551556049,
+   "variant": "Down",
+   "region": "floor 4",
+   "d": 4.41
+  },
+  {
+   "cp": 1448,
+   "t": 116017,
+   "group": 1912442081,
+   "variant": "FWSide",
+   "region": "floor 3",
+   "d": 4.14
+  },
+  {
+   "cp": 1475,
+   "t": 118787,
+   "group": 1193032753,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 2.06
+  },
+  {
+   "cp": 2574,
+   "t": 122434,
+   "group": 2129642833,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 4.31
+  },
+  {
+   "cp": 2566,
+   "t": 125929,
+   "group": 1606386337,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.67
+  },
+  {
+   "cp": 2486,
+   "t": 129206,
+   "group": 1547285697,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 4.58
+  },
+  {
+   "cp": 2482,
+   "t": 131454,
+   "group": 1998338481,
+   "variant": "Down",
+   "region": "floor 4",
+   "d": 2.96
+  },
+  {
+   "cp": 1353,
+   "t": 133556,
+   "group": 1980633313,
+   "variant": "FW",
+   "region": "floor 3",
+   "d": 2.7
+  },
+  {
+   "cp": 1436,
+   "t": 137062,
+   "group": 1024789057,
+   "variant": "FWSide",
+   "region": "floor 3",
+   "d": 2.19
+  },
+  {
+   "cp": 1433,
+   "t": 139707,
+   "group": 1867416289,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 1.78
+  },
+  {
+   "cp": 2555,
+   "t": 141974,
+   "group": 1365560593,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.14
+  },
+  {
+   "cp": 2638,
+   "t": 147532,
+   "group": 1689573489,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 3.53
+  },
+  {
+   "cp": 2631,
+   "t": 150936,
+   "group": 1258371873,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.01
+  },
+  {
+   "cp": 2701,
+   "t": 153154,
+   "group": 1535143025,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.14
+  },
+  {
+   "cp": 2773,
+   "t": 156286,
+   "group": 1839642593,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 4.17
+  },
+  {
+   "cp": 2777,
+   "t": 159831,
+   "group": 1532769969,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.46
+  },
+  {
+   "cp": 2858,
+   "t": 161966,
+   "group": 1941491521,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.69
+  },
+  {
+   "cp": 2781,
+   "t": 165408,
+   "group": 1761203841,
+   "variant": "Up",
+   "region": "floor 4",
+   "d": 2.26
+  },
+  {
+   "cp": 3883,
+   "t": 168685,
+   "group": 2035874337,
+   "variant": "Down",
+   "region": "floor 5",
+   "d": 1.76
+  },
+  {
+   "cp": 2776,
+   "t": 170874,
+   "group": 1108563889,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.29
+  },
+  {
+   "cp": 2706,
+   "t": 173055,
+   "group": 1310121841,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 3.96
+  },
+  {
+   "cp": 2640,
+   "t": 176018,
+   "group": 1585007201,
+   "variant": "Down",
+   "region": "floor 4",
+   "d": 2.28
+  },
+  {
+   "cp": 1528,
+   "t": 178107,
+   "group": 1387778849,
+   "variant": "CP",
+   "region": "floor 3",
+   "d": 2.55
+  },
+  {
+   "cp": 1523,
+   "t": 178156,
+   "group": 1302772001,
+   "variant": "FW",
+   "region": "floor 3",
+   "d": 2.7
+  },
+  {
+   "cp": 1609,
+   "t": 181457,
+   "group": 1872820001,
+   "variant": "FWSide",
+   "region": "floor 3",
+   "d": 3.75
+  },
+  {
+   "cp": 1616,
+   "t": 184002,
+   "group": 1698462849,
+   "variant": "Down",
+   "region": "floor 3",
+   "d": 2.03
+  },
+  {
+   "cp": 577,
+   "t": 186086,
+   "group": 1037204545,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.69
+  },
+  {
+   "cp": 648,
+   "t": 189568,
+   "group": 2001424417,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 1.86
+  },
+  {
+   "cp": 1701,
+   "t": 192528,
+   "group": 1399226753,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 1.23
+  },
+  {
+   "cp": 2782,
+   "t": 194676,
+   "group": 1958613937,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.69
+  },
+  {
+   "cp": 2713,
+   "t": 196746,
+   "group": 1249168529,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.7
+  },
+  {
+   "cp": 2786,
+   "t": 200046,
+   "group": 1626415393,
+   "variant": "Down",
+   "region": "floor 4",
+   "d": 2.14
+  },
+  {
+   "cp": 1700,
+   "t": 202896,
+   "group": 1752321105,
+   "variant": "Down",
+   "region": "floor 3",
+   "d": 1.27
+  },
+  {
+   "cp": 645,
+   "t": 205016,
+   "group": 1140444225,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.69
+  },
+  {
+   "cp": 715,
+   "t": 208269,
+   "group": 1959143633,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 3.8
+  },
+  {
+   "cp": 721,
+   "t": 210508,
+   "group": 1821965233,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 3.09
+  },
+  {
+   "cp": 1772,
+   "t": 212546,
+   "group": 1830230081,
+   "variant": "FW",
+   "region": "floor 3",
+   "d": 2.7
+  },
+  {
+   "cp": 1705,
+   "t": 215696,
+   "group": 1381035905,
+   "variant": "FWSide",
+   "region": "floor 3",
+   "d": 3.83
+  },
+  {
+   "cp": 1478,
+   "t": 218277,
+   "group": 1866073873,
+   "variant": "FWSide",
+   "region": "floor 3",
+   "d": 3.29
+  },
+  {
+   "cp": 1707,
+   "t": 220892,
+   "group": 2021139585,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 1.88
+  },
+  {
+   "cp": 2793,
+   "t": 223905,
+   "group": 1657303633,
+   "variant": "Up",
+   "region": "floor 4",
+   "d": 1.27
+  },
+  {
+   "cp": 3896,
+   "t": 226991,
+   "group": 1176806385,
+   "variant": "Up",
+   "region": "floor 5",
+   "d": 1.38
+  },
+  {
+   "cp": 5030,
+   "t": 229244,
+   "group": 1184045041,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.3
+  },
+  {
+   "cp": 5115,
+   "t": 232404,
+   "group": 1386372513,
+   "variant": "Down",
+   "region": "floor 6",
+   "d": 1.91
+  },
+  {
+   "cp": 3976,
+   "t": 235351,
+   "group": 1836937361,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 3.48
+  },
+  {
+   "cp": 3982,
+   "t": 237618,
+   "group": 2014313761,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 2.53
+  },
+  {
+   "cp": 3987,
+   "t": 240233,
+   "group": 1478856097,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 3.32
+  },
+  {
+   "cp": 3983,
+   "t": 242485,
+   "group": 1291386641,
+   "variant": "Down",
+   "region": "floor 5",
+   "d": 3.07
+  },
+  {
+   "cp": 2876,
+   "t": 244714,
+   "group": 1008153249,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.29
+  },
+  {
+   "cp": 2796,
+   "t": 247767,
+   "group": 2111633249,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 3.57
+  },
+  {
+   "cp": 2788,
+   "t": 251288,
+   "group": 1299569409,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 3.91
+  },
+  {
+   "cp": 2722,
+   "t": 254271,
+   "group": 1819218977,
+   "variant": "Down",
+   "region": "floor 4",
+   "d": 1.61
+  },
+  {
+   "cp": 1622,
+   "t": 257428,
+   "group": 1142469121,
+   "variant": "Down",
+   "region": "floor 3",
+   "d": 1.29
+  },
+  {
+   "cp": 582,
+   "t": 259526,
+   "group": 2019625297,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.69
+  },
+  {
+   "cp": 649,
+   "t": 261706,
+   "group": 1824743777,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.7
+  },
+  {
+   "cp": 584,
+   "t": 264875,
+   "group": 1981699393,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 3.4
+  },
+  {
+   "cp": 587,
+   "t": 268318,
+   "group": 1025305777,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.47
+  },
+  {
+   "cp": 658,
+   "t": 271348,
+   "group": 1524923633,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 1.73
+  },
+  {
+   "cp": 1481,
+   "t": 274297,
+   "group": 1863603393,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 2.03
+  },
+  {
+   "cp": 2799,
+   "t": 277227,
+   "group": 1443872321,
+   "variant": "Up",
+   "region": "floor 4",
+   "d": 1.94
+  },
+  {
+   "cp": 3900,
+   "t": 280394,
+   "group": 1344274865,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 3.97
+  },
+  {
+   "cp": 4339,
+   "t": 282679,
+   "group": 1399226756,
+   "variant": "_U",
+   "region": "floor 5",
+   "d": 2.73
+  },
+  {
+   "cp": 3905,
+   "t": 288026,
+   "group": 1143932529,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 2.8
+  },
+  {
+   "cp": 3897,
+   "t": 291716,
+   "group": 1837252561,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 3.16
+  },
+  {
+   "cp": 4344,
+   "t": 294089,
+   "group": 1055171172,
+   "variant": "_U",
+   "region": "floor 5",
+   "d": 3.87
+  },
+  {
+   "cp": 3828,
+   "t": 297218,
+   "group": 2143697521,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 3.13
+  },
+  {
+   "cp": 3901,
+   "t": 300712,
+   "group": 1487186961,
+   "variant": "Down",
+   "region": "floor 5",
+   "d": 3.15
+  },
+  {
+   "cp": 2795,
+   "t": 302796,
+   "group": 1320754721,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.7
+  },
+  {
+   "cp": 2878,
+   "t": 305906,
+   "group": 1798027377,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 3.14
+  },
+  {
+   "cp": 2875,
+   "t": 308486,
+   "group": 1412794321,
+   "variant": "Up",
+   "region": "floor 4",
+   "d": 1.71
+  },
+  {
+   "cp": 3978,
+   "t": 313081,
+   "group": 1162380753,
+   "variant": "Up",
+   "region": "floor 5",
+   "d": 1.79
+  },
+  {
+   "cp": 5111,
+   "t": 315186,
+   "group": 1558451057,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.69
+  },
+  {
+   "cp": 5029,
+   "t": 317414,
+   "group": 1015047953,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.43
+  },
+  {
+   "cp": 4962,
+   "t": 320506,
+   "group": 1476838097,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 4.16
+  },
+  {
+   "cp": 4970,
+   "t": 322768,
+   "group": 1049047441,
+   "variant": "Up",
+   "region": "floor 6",
+   "d": 2.75
+  },
+  {
+   "cp": 5963,
+   "t": 324866,
+   "group": 2097900897,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 2.69
+  },
+  {
+   "cp": 5899,
+   "t": 328345,
+   "group": 1338555777,
+   "variant": "Down",
+   "region": "floor 7",
+   "d": 2.51
+  },
+  {
+   "cp": 4897,
+   "t": 331509,
+   "group": 1108446817,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.36
+  },
+  {
+   "cp": 4891,
+   "t": 333748,
+   "group": 1621491681,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.44
+  },
+  {
+   "cp": 4883,
+   "t": 337206,
+   "group": 1589394049,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.36
+  },
+  {
+   "cp": 4805,
+   "t": 340187,
+   "group": 1354221553,
+   "variant": "Down",
+   "region": "floor 6",
+   "d": 1.33
+  },
+  {
+   "cp": 3663,
+   "t": 342424,
+   "group": 1790626993,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 3.74
+  },
+  {
+   "cp": 3581,
+   "t": 344584,
+   "group": 1015978849,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 4.14
+  },
+  {
+   "cp": 3504,
+   "t": 347936,
+   "group": 1069935841,
+   "variant": "Up",
+   "region": "floor 5",
+   "d": 1.92
+  },
+  {
+   "cp": 4648,
+   "t": 350967,
+   "group": 2134267025,
+   "variant": "Up",
+   "region": "floor 6",
+   "d": 1.2
+  },
+  {
+   "cp": 5681,
+   "t": 353076,
+   "group": 1624480433,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 2.69
+  },
+  {
+   "cp": 5614,
+   "t": 355196,
+   "group": 1425679825,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 2.7
+  },
+  {
+   "cp": 5683,
+   "t": 358312,
+   "group": 1649699681,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 3.53
+  },
+  {
+   "cp": 5678,
+   "t": 360518,
+   "group": 1150339665,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 2.38
+  },
+  {
+   "cp": 5675,
+   "t": 362715,
+   "group": 1830961825,
+   "variant": "Down",
+   "region": "floor 7",
+   "d": 3.04
+  },
+  {
+   "cp": 4631,
+   "t": 364826,
+   "group": 1967341825,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.62
+  },
+  {
+   "cp": 4552,
+   "t": 367884,
+   "group": 2137906033,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.1
+  },
+  {
+   "cp": 4558,
+   "t": 370149,
+   "group": 2102405473,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.25
+  },
+  {
+   "cp": 4565,
+   "t": 372711,
+   "group": 1998794449,
+   "variant": "Down",
+   "region": "floor 6",
+   "d": 1.64
+  },
+  {
+   "cp": 3421,
+   "t": 375758,
+   "group": 1786854609,
+   "variant": "Down",
+   "region": "floor 5",
+   "d": 1.42
+  },
+  {
+   "cp": 2317,
+   "t": 378781,
+   "group": 1670819329,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 3.11
+  },
+  {
+   "cp": 2321,
+   "t": 382235,
+   "group": 1855448769,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 3.11
+  },
+  {
+   "cp": 2407,
+   "t": 385212,
+   "group": 2121000753,
+   "variant": "Up",
+   "region": "floor 4",
+   "d": 1.67
+  },
+  {
+   "cp": 3508,
+   "t": 388356,
+   "group": 2046089137,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 2.89
+  },
+  {
+   "cp": 3512,
+   "t": 391845,
+   "group": 1474884273,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 3.24
+  },
+  {
+   "cp": 3594,
+   "t": 394116,
+   "group": 1227000401,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 3.25
+  },
+  {
+   "cp": 3676,
+   "t": 396329,
+   "group": 1653048737,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 3.88
+  },
+  {
+   "cp": 4343,
+   "t": 398589,
+   "group": 1298681604,
+   "variant": "_U",
+   "region": "floor 5",
+   "d": 1.16
+  },
+  {
+   "cp": 3762,
+   "t": 407990,
+   "group": 1260127057,
+   "variant": "Up",
+   "region": "floor 5",
+   "d": 3.58
+  },
+  {
+   "cp": 4895,
+   "t": 410196,
+   "group": 1972812849,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.7
+  },
+  {
+   "cp": 4813,
+   "t": 412474,
+   "group": 1480842769,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.45
+  },
+  {
+   "cp": 4731,
+   "t": 414624,
+   "group": 1637127457,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.13
+  },
+  {
+   "cp": 4658,
+   "t": 417742,
+   "group": 1617429937,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.91
+  },
+  {
+   "cp": 4385,
+   "t": 421617,
+   "group": 1000441617,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.1
+  },
+  {
+   "cp": 4580,
+   "t": 423746,
+   "group": 1068431553,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.7
+  },
+  {
+   "cp": 4457,
+   "t": 427126,
+   "group": 1192721329,
+   "variant": "CP",
+   "region": "floor 6",
+   "d": 2.88
+  },
+  {
+   "cp": 4388,
+   "t": 427174,
+   "group": 1009388417,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.77
+  },
+  {
+   "cp": 4664,
+   "t": 429439,
+   "group": 1920032561,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.29
+  },
+  {
+   "cp": 4672,
+   "t": 431698,
+   "group": 1601185521,
+   "variant": "Up",
+   "region": "floor 6",
+   "d": 2.75
+  },
+  {
+   "cp": 5707,
+   "t": 433925,
+   "group": 1303132193,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 3.95
+  },
+  {
+   "cp": 5776,
+   "t": 436962,
+   "group": 1013808641,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 3.91
+  },
+  {
+   "cp": 5771,
+   "t": 439189,
+   "group": 2143423425,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 2.12
+  },
+  {
+   "cp": 5766,
+   "t": 441389,
+   "group": 1241140225,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 2.07
+  },
+  {
+   "cp": 5761,
+   "t": 443598,
+   "group": 1927153921,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 2.44
+  },
+  {
+   "cp": 5755,
+   "t": 447461,
+   "group": 1928212257,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 4.33
+  },
+  {
+   "cp": 5826,
+   "t": 450843,
+   "group": 1664870129,
+   "variant": "Down",
+   "region": "floor 7",
+   "d": 2.02
+  },
+  {
+   "cp": 4810,
+   "t": 453948,
+   "group": 2098219025,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.41
+  },
+  {
+   "cp": 4816,
+   "t": 456214,
+   "group": 1299616401,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.08
+  },
+  {
+   "cp": 4822,
+   "t": 458418,
+   "group": 1811170481,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.48
+  },
+  {
+   "cp": 4826,
+   "t": 462208,
+   "group": 1824866193,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.14
+  },
+  {
+   "cp": 4461,
+   "t": 464589,
+   "group": 2133528403,
+   "variant": "_U",
+   "region": "floor 6",
+   "d": 3.88
+  },
+  {
+   "cp": 4366,
+   "t": 470008,
+   "group": 1370157585,
+   "variant": "Up",
+   "region": "floor 6",
+   "d": 4.66
+  },
+  {
+   "cp": 5908,
+   "t": 473433,
+   "group": 1984201393,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 2.48
+  },
+  {
+   "cp": 5910,
+   "t": 476867,
+   "group": 1032487889,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 3.53
+  },
+  {
+   "cp": 5845,
+   "t": 479933,
+   "group": 1716030001,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 4.19
+  },
+  {
+   "cp": 5849,
+   "t": 482759,
+   "group": 1628817185,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 2.52
+  },
+  {
+   "cp": 5842,
+   "t": 486254,
+   "group": 1410852097,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 2.92
+  },
+  {
+   "cp": 5778,
+   "t": 489263,
+   "group": 1904502257,
+   "variant": "Down",
+   "region": "floor 7",
+   "d": 1.15
+  },
+  {
+   "cp": 4751,
+   "t": 492613,
+   "group": 1697985025,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.63
+  },
+  {
+   "cp": 4743,
+   "t": 495942,
+   "group": 1073404497,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.95
+  },
+  {
+   "cp": 4661,
+   "t": 498165,
+   "group": 1322506465,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 3.96
+  },
+  {
+   "cp": 4589,
+   "t": 501156,
+   "group": 1455291393,
+   "variant": "Down",
+   "region": "floor 6",
+   "d": 1.42
+  },
+  {
+   "cp": 3442,
+   "t": 503266,
+   "group": 1426412417,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 2.69
+  },
+  {
+   "cp": 3525,
+   "t": 506389,
+   "group": 2046231233,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 4.04
+  },
+  {
+   "cp": 3520,
+   "t": 509106,
+   "group": 2147118961,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 3.05
+  },
+  {
+   "cp": 3527,
+   "t": 511782,
+   "group": 1859532129,
+   "variant": "Down",
+   "region": "floor 5",
+   "d": 1.71
+  },
+  {
+   "cp": 2420,
+   "t": 514039,
+   "group": 1302346769,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.53
+  },
+  {
+   "cp": 2339,
+   "t": 516146,
+   "group": 1470461761,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.7
+  },
+  {
+   "cp": 2424,
+   "t": 519564,
+   "group": 1751864897,
+   "variant": "Down",
+   "region": "floor 4",
+   "d": 1.55
+  },
+  {
+   "cp": 1298,
+   "t": 522566,
+   "group": 1316056529,
+   "variant": "Down",
+   "region": "floor 3",
+   "d": 1.94
+  },
+  {
+   "cp": 324,
+   "t": 524805,
+   "group": 1013384449,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 3.96
+  },
+  {
+   "cp": 258,
+   "t": 527928,
+   "group": 1146275713,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 4.63
+  },
+  {
+   "cp": 253,
+   "t": 530155,
+   "group": 1435040321,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 1.58
+  },
+  {
+   "cp": 246,
+   "t": 534011,
+   "group": 1528122081,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.61
+  },
+  {
+   "cp": 179,
+   "t": 537172,
+   "group": 1671910145,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 3.6
+  },
+  {
+   "cp": 175,
+   "t": 539903,
+   "group": 1797473713,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 2.55
+  },
+  {
+   "cp": 177,
+   "t": 543611,
+   "group": 1986631233,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 4.1
+  },
+  {
+   "cp": 124,
+   "t": 546854,
+   "group": 2050838977,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 3.26
+  },
+  {
+   "cp": 1050,
+   "t": 549844,
+   "group": 1744892465,
+   "variant": "FWSide",
+   "region": "floor 3",
+   "d": 4.29
+  },
+  {
+   "cp": 1048,
+   "t": 552435,
+   "group": 1886847249,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 1.2
+  },
+  {
+   "cp": 2214,
+   "t": 555525,
+   "group": 1973621873,
+   "variant": "CP",
+   "region": "floor 4",
+   "d": 4.03
+  },
+  {
+   "cp": 2171,
+   "t": 555573,
+   "group": 1392121057,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 4.21
+  },
+  {
+   "cp": 2174,
+   "t": 558951,
+   "group": 1948249473,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.76
+  },
+  {
+   "cp": 2245,
+   "t": 561174,
+   "group": 1949788289,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.45
+  },
+  {
+   "cp": 2330,
+   "t": 564455,
+   "group": 1231940977,
+   "variant": "Down",
+   "region": "floor 4",
+   "d": 2.13
+  },
+  {
+   "cp": 1201,
+   "t": 566576,
+   "group": 1182397137,
+   "variant": "FW",
+   "region": "floor 3",
+   "d": 2.69
+  },
+  {
+   "cp": 1286,
+   "t": 570104,
+   "group": 1543386513,
+   "variant": "Down",
+   "region": "floor 3",
+   "d": 2.06
+  },
+  {
+   "cp": 317,
+   "t": 573596,
+   "group": 1702937761,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 4.15
+  },
+  {
+   "cp": 319,
+   "t": 576955,
+   "group": 2097743025,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 3.91
+  },
+  {
+   "cp": 255,
+   "t": 580105,
+   "group": 1476225313,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 1.53
+  },
+  {
+   "cp": 1210,
+   "t": 583284,
+   "group": 1929246097,
+   "variant": "Down",
+   "region": "floor 3",
+   "d": 1.78
+  },
+  {
+   "cp": 254,
+   "t": 586245,
+   "group": 1853182561,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 3.59
+  },
+  {
+   "cp": 259,
+   "t": 588507,
+   "group": 1302048849,
+   "variant": "FWSide",
+   "region": "floor 2",
+   "d": 2.65
+  },
+  {
+   "cp": 262,
+   "t": 591837,
+   "group": 2003726017,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 2.8
+  },
+  {
+   "cp": 330,
+   "t": 594039,
+   "group": 1682506785,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 3.89
+  },
+  {
+   "cp": 398,
+   "t": 596224,
+   "group": 1591354049,
+   "variant": "FW",
+   "region": "floor 2",
+   "d": 4.14
+  },
+  {
+   "cp": 469,
+   "t": 599677,
+   "group": 2001962849,
+   "variant": "Up",
+   "region": "floor 2",
+   "d": 1.92
+  },
+  {
+   "cp": 1465,
+   "t": 601888,
+   "group": 1772040305,
+   "variant": "FW",
+   "region": "floor 3",
+   "d": 4.54
+  },
+  {
+   "cp": 1565,
+   "t": 605108,
+   "group": 1006211569,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 2.24
+  },
+  {
+   "cp": 2663,
+   "t": 608364,
+   "group": 1038487969,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 4.63
+  },
+  {
+   "cp": 2666,
+   "t": 611747,
+   "group": 1449465457,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.81
+  },
+  {
+   "cp": 2596,
+   "t": 613964,
+   "group": 1309490897,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.3
+  },
+  {
+   "cp": 2518,
+   "t": 617025,
+   "group": 1451495953,
+   "variant": "Down",
+   "region": "floor 4",
+   "d": 1.69
+  },
+  {
+   "cp": 1393,
+   "t": 620434,
+   "group": 1244702353,
+   "variant": "Up",
+   "region": "floor 3",
+   "d": 2.2
+  },
+  {
+   "cp": 2519,
+   "t": 623476,
+   "group": 1583506161,
+   "variant": "Up",
+   "region": "floor 4",
+   "d": 1.22
+  },
+  {
+   "cp": 3620,
+   "t": 626561,
+   "group": 2035648737,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 3.73
+  },
+  {
+   "cp": 3626,
+   "t": 628818,
+   "group": 1543670769,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 2.43
+  },
+  {
+   "cp": 3632,
+   "t": 631044,
+   "group": 1518709937,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 2.08
+  },
+  {
+   "cp": 3640,
+   "t": 633276,
+   "group": 1751953265,
+   "variant": "Up",
+   "region": "floor 5",
+   "d": 2.66
+  },
+  {
+   "cp": 4774,
+   "t": 635454,
+   "group": 1074070993,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.3
+  },
+  {
+   "cp": 4855,
+   "t": 637566,
+   "group": 1253432753,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.69
+  },
+  {
+   "cp": 4773,
+   "t": 639794,
+   "group": 2051319217,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.46
+  },
+  {
+   "cp": 4691,
+   "t": 641974,
+   "group": 1729111137,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.14
+  },
+  {
+   "cp": 4615,
+   "t": 644144,
+   "group": 1962178497,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.46
+  },
+  {
+   "cp": 4538,
+   "t": 647257,
+   "group": 1812810561,
+   "variant": "Up",
+   "region": "floor 6",
+   "d": 1.9
+  },
+  {
+   "cp": 5598,
+   "t": 649297,
+   "group": 1052392961,
+   "variant": "CP",
+   "region": "floor 7",
+   "d": 2.42
+  },
+  {
+   "cp": 5589,
+   "t": 649346,
+   "group": 1362132129,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 2.7
+  },
+  {
+   "cp": 5523,
+   "t": 652488,
+   "group": 1285476881,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 3.41
+  },
+  {
+   "cp": 5529,
+   "t": 654727,
+   "group": 1235331329,
+   "variant": "Down",
+   "region": "floor 7",
+   "d": 2.69
+  },
+  {
+   "cp": 4449,
+   "t": 658007,
+   "group": 1438999185,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 4.5
+  },
+  {
+   "cp": 4452,
+   "t": 661567,
+   "group": 1724127777,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 3.34
+  },
+  {
+   "cp": 4534,
+   "t": 663806,
+   "group": 1038983089,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.62
+  },
+  {
+   "cp": 4616,
+   "t": 665994,
+   "group": 2064777137,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.3
+  },
+  {
+   "cp": 4694,
+   "t": 669212,
+   "group": 1882051297,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.89
+  },
+  {
+   "cp": 4698,
+   "t": 672814,
+   "group": 1140464465,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 3.41
+  },
+  {
+   "cp": 4780,
+   "t": 675025,
+   "group": 1341841921,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 3.95
+  },
+  {
+   "cp": 4865,
+   "t": 677982,
+   "group": 1448964849,
+   "variant": "Up",
+   "region": "floor 6",
+   "d": 1.51
+  },
+  {
+   "cp": 5869,
+   "t": 681101,
+   "group": 1146950689,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 4.3
+  },
+  {
+   "cp": 5863,
+   "t": 685059,
+   "group": 1691072369,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 2.97
+  },
+  {
+   "cp": 5933,
+   "t": 688309,
+   "group": 1171049697,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 4.95
+  },
+  {
+   "cp": 5937,
+   "t": 691022,
+   "group": 1037169521,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 2.57
+  },
+  {
+   "cp": 5932,
+   "t": 693246,
+   "group": 1243228769,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 2.8
+  },
+  {
+   "cp": 5926,
+   "t": 696689,
+   "group": 1567758369,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 5.56
+  },
+  {
+   "cp": 5993,
+   "t": 698906,
+   "group": 1684850593,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 2.7
+  },
+  {
+   "cp": 5927,
+   "t": 702275,
+   "group": 2060640753,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 3.91
+  },
+  {
+   "cp": 5924,
+   "t": 704549,
+   "group": 1888328241,
+   "variant": "Down",
+   "region": "floor 7",
+   "d": 2.79
+  },
+  {
+   "cp": 4914,
+   "t": 706676,
+   "group": 2084247777,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.69
+  },
+  {
+   "cp": 4987,
+   "t": 710026,
+   "group": 1136457937,
+   "variant": "Down",
+   "region": "floor 6",
+   "d": 1.86
+  },
+  {
+   "cp": 3848,
+   "t": 713146,
+   "group": 1573297345,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 4.09
+  },
+  {
+   "cp": 3853,
+   "t": 718741,
+   "group": 1077782545,
+   "variant": "FWSide",
+   "region": "floor 5",
+   "d": 3.86
+  },
+  {
+   "cp": 3846,
+   "t": 722256,
+   "group": 1840724465,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 4.29
+  },
+  {
+   "cp": 3932,
+   "t": 725302,
+   "group": 1899781457,
+   "variant": "Up",
+   "region": "floor 5",
+   "d": 1.49
+  },
+  {
+   "cp": 5067,
+   "t": 728343,
+   "group": 1101713121,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.97
+  },
+  {
+   "cp": 5061,
+   "t": 730629,
+   "group": 2102559185,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.33
+  },
+  {
+   "cp": 5058,
+   "t": 733251,
+   "group": 1580948257,
+   "variant": "Up",
+   "region": "floor 6",
+   "d": 1.4
+  },
+  {
+   "cp": 6050,
+   "t": 736503,
+   "group": 2133528401,
+   "variant": "Down",
+   "region": "floor 7",
+   "d": 2.31
+  },
+  {
+   "cp": 5056,
+   "t": 740113,
+   "group": 2142004753,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 4.06
+  },
+  {
+   "cp": 5060,
+   "t": 743737,
+   "group": 1407604929,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 3.24
+  },
+  {
+   "cp": 5146,
+   "t": 746661,
+   "group": 1615496065,
+   "variant": "Up",
+   "region": "floor 6",
+   "d": 1.51
+  },
+  {
+   "cp": 6122,
+   "t": 749924,
+   "group": 1460924545,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 4.92
+  },
+  {
+   "cp": 6125,
+   "t": 753308,
+   "group": 1320456705,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 3.04
+  },
+  {
+   "cp": 6195,
+   "t": 756558,
+   "group": 1481675745,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 3.87
+  },
+  {
+   "cp": 6198,
+   "t": 760085,
+   "group": 2114179297,
+   "variant": "FW",
+   "region": "floor 7",
+   "d": 2.93
+  },
+  {
+   "cp": 6268,
+   "t": 763265,
+   "group": 1439310209,
+   "variant": "FWSide",
+   "region": "floor 7",
+   "d": 3.71
+  },
+  {
+   "cp": 6274,
+   "t": 765877,
+   "group": 1236347825,
+   "variant": "Down",
+   "region": "floor 7",
+   "d": 2.2
+  },
+  {
+   "cp": 5327,
+   "t": 771247,
+   "group": 1167729425,
+   "variant": "Down",
+   "region": "floor 6",
+   "d": 3.49
+  },
+  {
+   "cp": 4190,
+   "t": 774568,
+   "group": 1476913937,
+   "variant": "Up",
+   "region": "floor 5",
+   "d": 2.31
+  },
+  {
+   "cp": 5324,
+   "t": 776775,
+   "group": 1472965777,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 3.62
+  },
+  {
+   "cp": 5401,
+   "t": 779775,
+   "group": 1055171169,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.35
+  },
+  {
+   "cp": 4458,
+   "t": 781978,
+   "group": 1284970017,
+   "variant": "CP",
+   "region": "floor 6",
+   "d": 2.68
+  },
+  {
+   "cp": 4393,
+   "t": 782026,
+   "group": 1455140353,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 2.8
+  },
+  {
+   "cp": 5394,
+   "t": 785905,
+   "group": 2077300737,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 3.99
+  },
+  {
+   "cp": 5456,
+   "t": 789019,
+   "group": 1485470449,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 4.08
+  },
+  {
+   "cp": 5453,
+   "t": 791309,
+   "group": 1056618529,
+   "variant": "Down",
+   "region": "floor 6",
+   "d": 2.79
+  },
+  {
+   "cp": 4321,
+   "t": 796762,
+   "group": 1885379889,
+   "variant": "Down",
+   "region": "floor 5",
+   "d": 1.86
+  },
+  {
+   "cp": 3215,
+   "t": 799024,
+   "group": 2107044497,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.14
+  },
+  {
+   "cp": 3146,
+   "t": 801274,
+   "group": 1736449521,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.29
+  },
+  {
+   "cp": 3066,
+   "t": 804566,
+   "group": 1008433505,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 2.86
+  },
+  {
+   "cp": 3063,
+   "t": 807138,
+   "group": 1404196129,
+   "variant": "Up",
+   "region": "floor 4",
+   "d": 2.48
+  },
+  {
+   "cp": 4161,
+   "t": 809346,
+   "group": 1458121473,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 2.7
+  },
+  {
+   "cp": 4079,
+   "t": 811575,
+   "group": 1839949761,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 3.95
+  },
+  {
+   "cp": 3998,
+   "t": 813716,
+   "group": 1568129713,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 2.69
+  },
+  {
+   "cp": 4083,
+   "t": 817095,
+   "group": 1948116849,
+   "variant": "Down",
+   "region": "floor 5",
+   "d": 2.07
+  },
+  {
+   "cp": 2979,
+   "t": 820160,
+   "group": 1518415041,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 4.27
+  },
+  {
+   "cp": 2982,
+   "t": 823820,
+   "group": 1975919425,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 3.33
+  },
+  {
+   "cp": 2901,
+   "t": 825946,
+   "group": 2038009041,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 2.7
+  },
+  {
+   "cp": 2984,
+   "t": 829065,
+   "group": 1187105905,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 3.84
+  },
+  {
+   "cp": 2976,
+   "t": 832656,
+   "group": 1756911425,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 3.3
+  },
+  {
+   "cp": 2896,
+   "t": 836148,
+   "group": 1666030161,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 3.9
+  },
+  {
+   "cp": 2891,
+   "t": 838784,
+   "group": 1838561761,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 2.47
+  },
+  {
+   "cp": 2894,
+   "t": 842287,
+   "group": 1961674897,
+   "variant": "FW",
+   "region": "floor 4",
+   "d": 4.14
+  },
+  {
+   "cp": 2815,
+   "t": 845326,
+   "group": 1758838705,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 4.29
+  },
+  {
+   "cp": 2820,
+   "t": 848056,
+   "group": 2029351889,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 3.03
+  },
+  {
+   "cp": 2817,
+   "t": 850698,
+   "group": 1789216449,
+   "variant": "Up",
+   "region": "floor 4",
+   "d": 1.89
+  },
+  {
+   "cp": 3915,
+   "t": 852846,
+   "group": 1808485585,
+   "variant": "FW",
+   "region": "floor 5",
+   "d": 2.7
+  },
+  {
+   "cp": 3838,
+   "t": 856276,
+   "group": 1093129425,
+   "variant": "Up",
+   "region": "floor 5",
+   "d": 1.45
+  },
+  {
+   "cp": 4971,
+   "t": 858406,
+   "group": 1843038513,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.7
+  },
+  {
+   "cp": 4902,
+   "t": 860546,
+   "group": 2070253473,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 2.7
+  },
+  {
+   "cp": 4974,
+   "t": 863819,
+   "group": 1328866097,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.23
+  },
+  {
+   "cp": 4977,
+   "t": 867139,
+   "group": 2054614753,
+   "variant": "FW",
+   "region": "floor 6",
+   "d": 4.28
+  },
+  {
+   "cp": 4909,
+   "t": 870391,
+   "group": 1745952753,
+   "variant": "FWSide",
+   "region": "floor 6",
+   "d": 3.98
+  },
+  {
+   "cp": 4905,
+   "t": 874075,
+   "group": 2110925457,
+   "variant": "Down",
+   "region": "floor 6",
+   "d": 4.2
+  },
+  {
+   "cp": 4341,
+   "t": 876399,
+   "group": 1458121476,
+   "variant": "_U",
+   "region": "floor 5",
+   "d": 3.87
+  },
+  {
+   "cp": 3767,
+   "t": 880804,
+   "group": 1104237041,
+   "variant": "Down",
+   "region": "floor 5",
+   "d": 3.24
+  },
+  {
+   "cp": 2662,
+   "t": 884149,
+   "group": 1409441521,
+   "variant": "FWSide",
+   "region": "floor 4",
+   "d": 4.67
+  },
+  {
+   "cp": 18,
+   "t": 885996,
+   "group": 1163207569,
+   "variant": "EndFW",
+   "region": "spire",
+   "d": 3.04
+  },
+  {
+   "cp": 17,
+   "t": 887760,
+   "group": 2110775393,
+   "variant": "EndFW",
+   "region": "spire",
+   "d": 3.54
+  },
+  {
+   "cp": 16,
+   "t": 889510,
+   "group": 1191525713,
+   "variant": "EndFW",
+   "region": "spire",
+   "d": 3.54
+  },
+  {
+   "cp": 14,
+   "t": 891279,
+   "group": 1324517265,
+   "variant": "EndU",
+   "region": "spire",
+   "d": 3.54
+  },
+  {
+   "cp": 15,
+   "t": 892942,
+   "group": 2085715921,
+   "variant": "EndU",
+   "region": "spire",
+   "d": 1.25
+  },
+  {
+   "cp": 22,
+   "t": 894731,
+   "group": 1875528577,
+   "variant": "EndFW",
+   "region": "spire",
+   "d": 3.59
+  },
+  {
+   "cp": 23,
+   "t": 896580,
+   "group": 1795403329,
+   "variant": "EndFW",
+   "region": "spire",
+   "d": 3.58
+  },
+  {
+   "cp": 50,
+   "t": 898420,
+   "group": 1402072641,
+   "variant": "EndFW",
+   "region": "spire",
+   "d": 3.16
+  },
+  {
+   "cp": 0,
+   "t": 900104,
+   "group": 1227757121,
+   "variant": "EndFW",
+   "region": "spire",
+   "d": 3.58
+  },
+  {
+   "cp": 1,
+   "t": 901944,
+   "group": 2056886753,
+   "variant": "EndFW",
+   "region": "spire",
+   "d": 3.16
+  },
+  {
+   "cp": 104,
+   "t": 903905,
+   "group": 67,
+   "variant": "CP",
+   "region": "spire",
+   "d": 3.56
+  },
+  {
+   "cp": -1,
+   "t": 904135,
+   "group": -1,
+   "variant": "FINISH",
+   "region": "spire",
+   "d": 3.56
+  }
+ ]
+}

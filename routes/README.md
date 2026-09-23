@@ -9,14 +9,28 @@ twice.
 **Re-validate before trusting any of them:**
 
 ```bash
-./verify/check.sh                                # all six at once
+./verify/check.sh                                # all eight at once
 bun verify/validate.ts routes/best-321-partial.json
 ```
 
-Exit **0** complete winner · **1** legal but partial · **2** illegal. Every file
-below returns 1. None is a winner.
+Exit **0** complete winner · **1** legal but partial · **2** illegal.
 
-## Files
+## The finished route
+
+| file | player | time | steps | groups |
+|---|---|---|---|---|
+| [`finish-322-kattz95.json`](finish-322-kattz95.json) | Kattz95 | 15:04.135 | 323 | **322 / 322**, exit 0 |
+| [`finish-322-ciryll.json`](finish-322-ciryll.json) | Ciryll | 16:21.645 | 323 | **322 / 322**, exit 0 |
+
+Both files hold **the same 323 boxes in the same order** (fact 134). They are
+kept apart because each carries its own driver's timing: `t` is the millisecond
+each claim registered, and `d` is the distance from the car to the matched box.
+The route was read out of the leaderboard ghost named in each file's `meta`,
+and the graph's edges were never consulted (fact 133).
+
+## Solver routes
+
+None of these is a winner. Each returns exit 1.
 
 | file | steps | groups | omits |
 |---|---|---|---|
@@ -36,15 +50,17 @@ one-group wall (fact 111, fact 112).
 claiming `1972812849`. `best-321-alt` and `best-321-third` came from
 cumulative-union recombination on 2026-08-09.
 
-**Rank these by novelty, not by score.** The union of every known route is
-INFEASIBLE (fact 113), so a 322 needs edges nobody has — and some of these 321s
-lie entirely inside the pool already explored, while a 320 from the
-recombination lane carries thirty edges beyond it.
+**Rank these by novelty, not by score.** The union of every solver route is
+INFEASIBLE (fact 113), so a 322 needs edges no solver route has — and some of
+these 321s lie entirely inside the pool already explored, while a 320 from the
+recombination lane carries thirty edges beyond it. The finished route carries
+288 (fact 135).
 [THE-CAMPAIGN.md](../THE-CAMPAIGN.md) §4 has the numbers.
 
 ## Format
 
-Two shapes are accepted, and these files use the first:
+Two shapes are accepted, and these files use the first. Fields beyond `cp` are
+for reading and the referee ignores them:
 
 ```json
 {"route": [{"cp": 28}, {"cp": 101}, …]}

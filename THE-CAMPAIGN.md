@@ -3,8 +3,9 @@
 What was tried against Haystack 6, what died, and the four findings that reverse
 an instinct.
 
-Six weeks of work, no 322. This document exists so the next person spends their
-compute somewhere new. You do not need [THE-MAP.md](THE-MAP.md) to read it;
+Six weeks of work, and no solver reached 322. Two players did afterwards, on a
+route that lies almost entirely outside everything the campaign produced (§8).
+This document exists so the next person spends their compute somewhere new. You do not need [THE-MAP.md](THE-MAP.md) to read it;
 [THE-PROBLEM.md](THE-PROBLEM.md) has the instance if you want to start work.
 
 ---
@@ -177,10 +178,33 @@ every future 322. The runs are independent, so this parallelises freely — but
 the cut analysis should choose the territory first. This is the workhorse, not
 the compass.
 
-**One more thing worth doing that is not compute.** unbeaten.at's $200 bounty on
-this map has a discussion thread. Bounty hunters may hold partial routes nobody
-has published, and partial routes are exactly the recombination fuel this
-campaign ran short of.
+**Measure against the finished route, and do not seed from it.** A solver
+seeded from `routes/finish-322-*.json` proves nothing. The finished route is a
+check instead: does a method's search ever enter the territory the 322 uses?
+255 of its 323 boxes are boxes no solver route visits (fact 135).
+
+## 8. How it ended
+
+Not by compute. On 2026-09-06 Ciryll finished the map in 16:21.645, the first
+leaderboard entry in three months. On 2026-09-08 Kattz95 drove the same route
+in 15:04.135, under the author time. The claim order was read out of each ghost
+— the checkpoint timestamps against the recorded car position — and both pass
+the referee with exit 0 (fact 133, fact 134).
+
+What the route shows about the campaign:
+
+- **It leaves the solvers at the first step.** It starts at `START#29`, and all
+  138 solver routes in this repo start at `START#28`. The warm-started searches
+  were in a different basin from the first move.
+- **It lies almost entirely outside the known pool.** 288 of its 322 edges and
+  255 of its 323 boxes are in no solver route (fact 135). "Optimise novelty"
+  was the right direction and far too small in scale: the most novel solver
+  routes carried about thirty novel edges (§4).
+- **It claims all three groups the 321s each missed**, and each one through a
+  box that no solver route visits.
+
+The routing instance is no longer open. The solver question is: no method here
+found the route, and no method has yet been shown to find it unaided.
 
 ---
 

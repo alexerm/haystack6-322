@@ -59,7 +59,16 @@ referee for any claim; §7 below.
 
 ## 3. Known bounds
 
-**Best known: 321 of 322.** Nobody, human or solver, has produced a legal 322.
+**A 322 exists, and it came from players, not from a solver.** Ciryll finished
+the map on 2026-09-06 and Kattz95 on 2026-09-08, on the same route box for box.
+`routes/finish-322-ciryll.json` and `routes/finish-322-kattz95.json` hold it,
+and the referee returns exit 0 on both (fact 133, fact 134). The route was read
+out of the ghosts without consulting the graph's edges, so this is also the
+strongest check the graph has had: all 322 moves were edges it already had.
+
+**The best any solver reached is 321 of 322.** The rest of this section is
+about the solver routes. It still holds, and it is the evidence for why search
+stopped one group short.
 
 **The missing group is mobile.** Three refereed routes reach 321, each omitting
 a *different* group (fact 111):
@@ -78,15 +87,15 @@ never-co-claimed triples. `routes/best-315-partial.json` claims all twelve at
 once. **So no group, pair or triple is the obstruction.** It is diffuse and it
 lives in the routing.
 
-**The union of every known route is INFEASIBLE** (fact 113). A 322 needs an edge
-nobody has used yet.
+**The union of every solver route is INFEASIBLE** (fact 113), so a 322 had to
+use edges no solver route used. The finished route uses 288 such edges out of
+322 (fact 135).
 
 **No route diverges from the 321 at or after step 171** (fact 110).
 
-**In the game, a 322 certainly exists.** The author's validation run is embedded
-in the released build as 323 waypoint timestamps (fact 132) — that is the map's
-own data, and it settles the question for the map. **In this graph it is open.**
-There is no proof in either direction. §4 is why that gap is not a formality.
+**The author's validation run is a second, different 322.** It is embedded in
+the released build as 323 waypoint timestamps (fact 132). Its boxes are not
+recoverable (fact 79), but it does not match the finished route (fact 133).
 
 ### 3a. The sharpest statement of the wall
 
@@ -134,6 +143,9 @@ The only bridge to that group anywhere on disk is a single corridor,
 `1861 → 1947 → 3044 → 1944`, whose second box is one the route already uses.
 `1947` and `1944` compete for exactly the same six entry boxes.
 
+The finished route claims `g1972812849` through `4895`, a member that no route
+in this repo other than the finished one visits (fact 135).
+
 ## 4. How honest this instance is
 
 **Read this before you model it.** The graph is derived from the map by rules,
@@ -169,7 +181,9 @@ apart and are genuinely different shafts. `GOAL_AXIS` exists solely as a
 hand-carved exception for that one case. The rule is right at 4.47 m and wider
 and wrong at 4.00 m, and the fix was a special case rather than a better rule.
 
-If a 322 turns out not to exist in this graph, that is where to look first.
+The finished route passes the referee on this graph as built, so the caveat did
+not block the one complete route known. It can still misstate a move that
+nobody has driven.
 
 ## 5. What the wall looks like
 
@@ -247,6 +261,9 @@ referee shares no code with any solver, deliberately, so a solver's own
 bookkeeping bug cannot hide behind agreeing with itself.
 
 ## 8. Starting from where this left off
+
+The target is a solver run that reaches exit 0 without being seeded from
+`routes/finish-322-*.json`. A run seeded from the finished route proves nothing.
 
 [`solve/`](solve) holds the CP-SAT model of record, which reproduces the 321
 from a warm start, and `mine_routes.py`, which ranks routes by edges no known
